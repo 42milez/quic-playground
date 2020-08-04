@@ -33,3 +33,4 @@ docker-compose run --rm -e COVERAGE=ON test
 ## References
 - [QUIC Working Group](https://quicwg.org)
 - [Implementations](https://github.com/quicwg/base-drafts/wiki/Implementations)
+- [Chromium's QUIC Implementation](https://quiche.googlesource.com/quiche/)
