@@ -17,13 +17,13 @@ matrix:
         # Libraries
         - SRC_PATH=$HOME/.local/src
         - CATCH2_VERSION=2.13.0
-        - CATCH2_URL=https://github.com/catchorg/Catch2/archive/v$CATCH2_VERSION.tar.gz
+        - CATCH2_REPO=https://github.com/catchorg/Catch2.git
         - CATCH2_SRC_PATH=$SRC_PATH/catch2
         - LYRA_VERSION=1.4
-        - LYRA_URL=https://github.com/bfgroup/Lyra/archive/$LYRA_VERSION.tar.gz
+        - LYRA_REPO=git@github.com:bfgroup/Lyra.git
         - LYRA_SRC_PATH=$SRC_PATH/lyra
         - SPDLOG_VERSION=1.7.0
-        - SPDLOG_URL=https://github.com/gabime/spdlog/archive/v$SPDLOG_VERSION.tar.gz
+        - SPDLOG_REPO=https://github.com/gabime/spdlog.git
         - SPDLOG_SRC_PATH=$SRC_PATH/spdlog
       addons:
         apt:
@@ -60,16 +60,18 @@ install:
   - python3 -m pip install --no-cache-dir cmake==$CMAKE_VERSION
   - $CMAKE --version
   # Install Catch2
-  - git clone https://github.com/catchorg/Catch2.git $CATCH2_SRC_PATH
+  - git clone $CATCH2_REPO $CATCH2_SRC_PATH
   - cd $CATCH2_SRC_PATH
   - git checkout -b v$CATCH2_VERSION refs/tags/v$CATCH2_VERSION
   - $CMAKE -Bbuild -H. -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=$HOME/.local
   - $CMAKE --build build/ --target install
   # Install Lyra
-  - git clone git@github.com:bfgroup/Lyra.git $LYRA_SRC_PATH
+  - git clone $LYRA_REPO $LYRA_SRC_PATH
+  - cd $LYRA_SRC_PATH
+  - git checkout -b $LYRA_VERSION refs/tags/$LYRA_VERSION
   - cp -pR $LYRA_SRC_PATH/data/single_include/lyra $CMAKE_INCLUDE_PATH/lyra
   # Install spdlog
-  - git clone https://github.com/gabime/spdlog.git $SPDLOG_SRC_PATH
+  - git clone $SPDLOG_REPO $SPDLOG_SRC_PATH
   - cd $SPDLOG_SRC_PATH
   - git checkout -b v$SPDLOG_VERSION refs/tags/v$SPDLOG_VERSION
   - mkdir build
