@@ -2,12 +2,14 @@ FROM ubuntu:18.04
 
 ARG PROJECT_ROOT=/var/project
 
-ARG CLANG_VERSION=10
-ARG CMAKE_VERSION=3.16.8
 ARG BINARY_PATH=/usr/local/bin
 ARG INCLUDE_PATH=/usr/local/include
+ARG DOWNLOAD_PATH=/root
 
-ARG CATCH2_VERSION=2.12.4
+ARG CLANG_VERSION=10
+ARG CMAKE_VERSION=3.16.8
+
+ARG CATCH2_VERSION=2.13.0
 ARG CATCH2_URL=https://github.com/catchorg/Catch2/archive/v$CATCH2_VERSION.tar.gz
 
 ARG GITHUB_RELEASE_VERSION=0.8.1
@@ -15,6 +17,9 @@ ARG GITHUB_RELEASE_URL=https://github.com/github-release/github-release/releases
 
 ARG LYRA_VERSION=1.4
 ARG LYRA_URL=https://github.com/bfgroup/Lyra/archive/$LYRA_VERSION.tar.gz
+
+ARG SPDLOG_VERSION=1.7.0
+ARG SPDLOG_URL=https://github.com/gabime/spdlog/archive/v$SPDLOG_VERSION.tar.gz
 
 ENV CC clang-$CLANG_VERSION
 ENV CXX clang++-$CLANG_VERSION
@@ -63,18 +68,23 @@ RUN \
 #  Install libraries
 # --------------------------------------------------
 RUN \
-  # spdlog
-  apt-get install -y \
-    libspdlog-dev \
   # Catch2
-  && git clone https://github.com/catchorg/Catch2.git \
-  && cd Catch2 \
+  curl -L $CATCH2_URL | tar zx -C $DOWNLOAD_PATH \
+  && cd $DOWNLOAD_PATH/Catch2-$CATCH2_VERSION \
   && cmake -Bbuild -H. -DBUILD_TESTING=OFF \
   && cmake --build build/ --target install \
   # Lyra
-  && curl -L $LYRA_URL | tar zx -C /root \
-  && cp -pR /root/Lyra-$LYRA_VERSION/data/single_include/lyra $INCLUDE_PATH/lyra \
-  && rm -rf /root/Lyra-$LYRA_VERSION
+  && curl -L $LYRA_URL | tar zx -C $DOWNLOAD_PATH \
+  && cp -pR $DOWNLOAD_PATH/Lyra-$LYRA_VERSION/data/single_include/lyra $INCLUDE_PATH/lyra \
+  && rm -rf $DOWNLOAD_PATH/Lyra-$LYRA_VERSION \
+  # spdlog
+  && curl -L $SPDLOG_URL | tar zx -C $DOWNLOAD_PATH \
+  && cd $DOWNLOAD_PATH/spdlog-$SPDLOG_VERSION \
+  && mkdir build \
+  && cd build \
+  && cmake .. \
+  && make -j \
+  && rm -rf $DOWNLOAD_PATH/spdlog-$SPDLOG_VERSION
 
 #  Clean up the apt cache
 # --------------------------------------------------
