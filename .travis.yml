@@ -20,7 +20,7 @@ matrix:
         - CATCH2_REPO=https://github.com/catchorg/Catch2.git
         - CATCH2_SRC_PATH=$SRC_PATH/catch2
         - LYRA_VERSION=1.4
-        - LYRA_REPO=git@github.com:bfgroup/Lyra.git
+        - LYRA_REPO=https://github.com/bfgroup/Lyra.git
         - LYRA_SRC_PATH=$SRC_PATH/lyra
         - SPDLOG_VERSION=1.7.0
         - SPDLOG_REPO=https://github.com/gabime/spdlog.git
