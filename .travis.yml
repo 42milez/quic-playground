@@ -8,23 +8,15 @@ matrix:
         # CMake
         - BUILD_DIR_PATH=$TRAVIS_BUILD_DIR/build
         - BUILD_TYPE=Debug
-        - CMAKE=$HOME/.local/bin/cmake
         - CMAKE_INCLUDE_PATH=$HOME/.local/include
         - CMAKE_LIBRARY_PATH=$HOME/.local/lib
         - CMAKE_PREFIX_PATH=$HOME/.local
         - CMAKE_VERSION=3.16.8
-        - CTEST=$HOME/.local/bin/ctest
         # Libraries
         - SRC_PATH=$HOME/.local/src
         - CATCH2_VERSION=2.13.0
-        - CATCH2_REPO=https://github.com/catchorg/Catch2.git
-        - CATCH2_SRC_PATH=$SRC_PATH/catch2
         - LYRA_VERSION=1.4
-        - LYRA_REPO=https://github.com/bfgroup/Lyra.git
-        - LYRA_SRC_PATH=$SRC_PATH/lyra
         - SPDLOG_VERSION=1.7.0
-        - SPDLOG_REPO=https://github.com/gabime/spdlog.git
-        - SPDLOG_SRC_PATH=$SRC_PATH/spdlog
       addons:
         apt:
           update: true
@@ -58,25 +50,25 @@ install:
   # Install CMake
   - python3 -m pip install --no-cache-dir --upgrade pip
   - python3 -m pip install --no-cache-dir cmake==$CMAKE_VERSION
-  - $CMAKE --version
+  - $HOME/.local/bin/cmake --version
   # Install Catch2
-  - git clone $CATCH2_REPO $CATCH2_SRC_PATH
-  - cd $CATCH2_SRC_PATH
+  - git clone https://github.com/catchorg/Catch2.git $SRC_PATH/catch2
+  - cd $SRC_PATH/catch2
   - git checkout -b v$CATCH2_VERSION refs/tags/v$CATCH2_VERSION
-  - $CMAKE -Bbuild -H. -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=$HOME/.local
-  - $CMAKE --build build/ --target install
+  - $HOME/.local/bin/cmake -Bbuild -H. -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=$HOME/.local
+  - $HOME/.local/bin/cmake --build build/ --target install
   # Install Lyra
-  - git clone $LYRA_REPO $LYRA_SRC_PATH
-  - cd $LYRA_SRC_PATH
+  - git clone https://github.com/bfgroup/Lyra.git $SRC_PATH/lyra
+  - cd $SRC_PATH/lyra
   - git checkout -b $LYRA_VERSION refs/tags/$LYRA_VERSION
-  - cp -pvR $LYRA_SRC_PATH/data/single_include/lyra $CMAKE_INCLUDE_PATH/lyra
+  - cp -pvR $SRC_PATH/lyra/data/single_include/lyra $CMAKE_INCLUDE_PATH/lyra
   # Install spdlog
-  - git clone $SPDLOG_REPO $SPDLOG_SRC_PATH
-  - cd $SPDLOG_SRC_PATH
+  - git clone https://github.com/gabime/spdlog.git $SRC_PATH/spdlog
+  - cd $SRC_PATH/spdlog
   - git checkout -b v$SPDLOG_VERSION refs/tags/v$SPDLOG_VERSION
   - mkdir build
   - cd build
-  - $CMAKE ..
+  - $HOME/.local/bin/cmake ..
   - make -j
 script:
   # Setup
