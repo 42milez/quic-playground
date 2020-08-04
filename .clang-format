@@ -3,7 +3,6 @@ BasedOnStyle: Microsoft
 
 AccessModifierOffset: -4
 AlignAfterOpenBracket: Align
-AlignConsecutiveAssignments: true
 AllowShortFunctionsOnASingleLine: All
 AlwaysBreakAfterReturnType: TopLevelDefinitions
 BraceWrapping:

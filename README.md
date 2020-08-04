@@ -1,6 +1,8 @@
 # Playground for QUIC
 ![Travis (.org) branch](https://img.shields.io/travis/42milez/quic-playground/master) ![Codecov branch](https://img.shields.io/codecov/c/gh/42milez/quic-playground/master)
 
+⚠️ THIS PROJECT IS STRONGLY INSPIRED BY CHROMIUM'S QUIC IMPLEMENTATION.
+
 ## Development
 #### Build docker image
 ```
