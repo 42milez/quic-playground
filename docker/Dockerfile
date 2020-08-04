@@ -51,8 +51,6 @@ RUN \
   && sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
   && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd \
   && mkdir -p /root/.ssh
-COPY docker/id_ed25519.pub /root/.ssh/authorized_keys
-RUN chmod 0400 /root/.ssh/authorized_keys
 
 #  Install CMake
 # --------------------------------------------------
