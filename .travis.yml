@@ -66,13 +66,12 @@ install:
   - $CMAKE -Bbuild -H. -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=$HOME/.local
   - $CMAKE --build build/ --target install
   # Install Lyra
-  - mkdir -p $LYRA_SRC_PATH
-  - curl -L $LYRA_URL | tar zx -C $LYRA_SRC_PATH --strip-components=1
+  - git clone git@github.com:bfgroup/Lyra.git $LYRA_SRC_PATH
   - cp -pR $LYRA_SRC_PATH/data/single_include/lyra $CMAKE_INCLUDE_PATH/lyra
   # Install spdlog
-  - mkdir -p $SPDLOG_SRC_PATH
-  - curl -L $SPDLOG_URL | tar zx -C $SPDLOG_SRC_PATH --strip-components=1
+  - git clone https://github.com/gabime/spdlog.git $SPDLOG_SRC_PATH
   - cd $SPDLOG_SRC_PATH
+  - git checkout -b v$SPDLOG_VERSION refs/tags/v$SPDLOG_VERSION
   - mkdir build
   - cd build
   - $CMAKE ..
