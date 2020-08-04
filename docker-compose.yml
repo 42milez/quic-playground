@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 x-volumes: &VOLUMES
   volumes:
     - cmake_build_debug_docker:/var/project/cmake-build-debug-docker
@@ -21,8 +21,8 @@ services:
     container_name: quic-dev-server
     image: base-quic:latest
     ports:
-      - '2222:22'
-      - '7777:7777'
+      - "2222:22"
+      - "7777:7777"
     volumes:
       - cmake_build_debug_docker:/var/project/cmake-build-debug-docker
   test:
