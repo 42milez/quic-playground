@@ -19,6 +19,8 @@ matrix:
         - CATCH2_INSTALL_PATH=$HOME/.local/src/catch2
         - LYRA_VERSION=1.4
         - LYRA_INSTALL_PATH=$HOME/.local/src/lyra
+        - SPDLOG_VERSION=1.7.0
+        - SPDLOG_INSTALL_PATH=$HOME/.local/src/spdlog
       addons:
         apt:
           update: true
@@ -26,7 +28,6 @@ matrix:
             - build-essential
             - clang-10
             - curl
-            - libspdlog-dev
             - llvm-10
             - python3-pip
 git:
@@ -50,6 +51,9 @@ before_install:
   # Configurations
   - mkdir -p $CMAKE_INCLUDE_PATH
 install:
+  # Install CMake
+  - python3 -m pip install --no-cache-dir --upgrade pip
+  - python3 -m pip install --no-cache-dir cmake==$CMAKE_VERSION
   # Install Catch2
   - git clone https://github.com/catchorg/Catch2.git $CATCH2_INSTALL_PATH
   - cd $CATCH2_INSTALL_PATH
@@ -59,9 +63,14 @@ install:
   - mkdir -p $LYRA_INSTALL_PATH
   - curl -L https://github.com/bfgroup/Lyra/archive/$LYRA_VERSION.tar.gz | tar zx -C $LYRA_INSTALL_PATH --strip-components=1
   - cp -pR $LYRA_INSTALL_PATH/data/single_include/lyra $CMAKE_INCLUDE_PATH/lyra
-  # Install CMake
-  - python3 -m pip install --no-cache-dir --upgrade pip
-  - python3 -m pip install --no-cache-dir cmake==$CMAKE_VERSION
+  # Install spdlog
+  - mkdir -p $SPDLOG_INSTALL_PATH
+  - curl -L https://github.com/gabime/spdlog/archive/v$SPDLOG_VERSION.tar.gz | tar zx -C $SPDLOG_INSTALL_PATH --strip-components=1
+  - cd $SPDLOG_INSTALL_PATH
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make -j
 after_install:
   - $CMAKE --version
 script:
@@ -90,4 +99,4 @@ after_success:
   - bash <(curl -s https://codecov.io/bash) -f $TRAVIS_BUILD_DIR/coverage.info
 notifications:
   slack:
-    secure: "P3qNUGQQR6OP87peqoZkPN9zQYYP+/XyN/qvsdudFk35K9Le4utqZTC/DmKqRL9mLmwPhF+UzJ6sHeUJ9utSGE8P7hxu5KnfW8KEak/jlL1bmmcjpQPJcAaH1kyKXj/JEqevAAMHsJgULnJ2tu1fYV3dd4fok+jF5MXmizJzouerSNGwzHls7cN6xpXPjnciW7TkOSw0/G0taaK36NlJIp2hhjpiVi75reRchRO8FzCo9WTHcOgIXQHYXFPGjoNQ51xU6LVHK5fFc/EmIKPbYqb2GbXnxKTPCd6abPceRYUYmmsT1FytHyeUboxDlth8JnuzTGjzebKFzlb2EYDjGiNj8s5a1jSXQoJ2Sj+6dRlQAPMF0Dt4p6MKoWELv99RSY5kmmpw4Gniq0uy0NOq8N7XEo5SUY68QlZB3/z3yD3A4UVlmEqgBzHr+hpPZhy5Fb1eOpiMBVXww1LbKx2j8KxXVJ6iZ9mBWEoxAbqWRnaD7ZW4n1j5+s0yTrXQp7X+ZcPSqYUhiDFRp5SN4wNiTD2SpdN6oVhqOh5FStrNbVI01k0uQPzVZJIUhRaV21oJteZ6XbA4wmCDWVa8zLyxNtxaZE87m8yaNQUOsKICsBCWpbyPS5Z/BQyolZiYbBrDDIvaCLt7lxPauegiaGsyHMMnGzMsgS7S7xg1EFMtE9E="
+    secure: ""
