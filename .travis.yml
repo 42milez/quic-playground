@@ -1,0 +1,93 @@
+language: cpp
+matrix:
+  include:
+    - dist: bionic
+      env:
+        # Clang
+        - CLANG_VERSION=10
+        # CMake
+        - BUILD_DIR_PATH=$TRAVIS_BUILD_DIR/build
+        - BUILD_TYPE=Debug
+        - CMAKE=$HOME/.local/bin/cmake
+        - CMAKE_INCLUDE_PATH=$HOME/.local/include
+        - CMAKE_LIBRARY_PATH=$HOME/.local/lib
+        - CMAKE_PREFIX_PATH=$HOME/.local
+        - CMAKE_VERSION=3.16.8
+        - CTEST=$HOME/.local/bin/ctest
+        # Libraries
+        - CATCH2_VERSION=2.12.4
+        - CATCH2_INSTALL_PATH=$HOME/.local/src/catch2
+        - LYRA_VERSION=1.4
+        - LYRA_INSTALL_PATH=$HOME/.local/src/lyra
+      addons:
+        apt:
+          update: true
+          packages:
+            - build-essential
+            - clang-10
+            - curl
+            - libspdlog-dev
+            - llvm-10
+            - python3-pip
+git:
+  submodules: false
+before_install:
+  # Submodules
+  - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+  - git submodule update --init --recursive
+  # Check compilers
+  - export CXX=clang++-$CLANG_VERSION
+  - export CC=clang-$CLANG_VERSION
+  - which $CXX
+  - $CXX --version
+  - which $CC
+  - $CC --version
+  # Check LLVM tools
+  - which llvm-profdata-$CLANG_VERSION
+  - llvm-profdata-$CLANG_VERSION show --version
+  - which llvm-cov-$CLANG_VERSION
+  - llvm-cov-$CLANG_VERSION show --version
+  # Configurations
+  - mkdir -p $CMAKE_INCLUDE_PATH
+install:
+  # Install Catch2
+  - git clone https://github.com/catchorg/Catch2.git $CATCH2_INSTALL_PATH
+  - cd $CATCH2_INSTALL_PATH
+  - cmake -Bbuild -H. -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=$HOME/.local
+  - cmake --build build/ --target install
+  # Install Lyra
+  - mkdir -p $LYRA_INSTALL_PATH
+  - curl -L https://github.com/bfgroup/Lyra/archive/$LYRA_VERSION.tar.gz | tar zx -C $LYRA_INSTALL_PATH --strip-components=1
+  - cp -pR $LYRA_INSTALL_PATH/data/single_include/lyra $CMAKE_INCLUDE_PATH/lyra
+  # Install CMake
+  - python3 -m pip install --no-cache-dir --upgrade pip
+  - python3 -m pip install --no-cache-dir cmake==$CMAKE_VERSION
+after_install:
+  - $CMAKE --version
+script:
+  # Setup
+  - cd $TRAVIS_BUILD_DIR
+  - mkdir -p $BUILD_DIR_PATH
+  # Run test with address sanitizer
+  - ASAN=ON bash script/build.sh
+  - bash script/test.sh
+  # Run test with code coverage
+  - COVERAGE=ON bash script/build.sh
+  - bash script/test.sh
+after_success:
+  # Export coverage data
+  - |
+    llvm-profdata-$CLANG_VERSION \
+      merge $BUILD_DIR_PATH/test/unit/default.profraw \
+      -o $TRAVIS_BUILD_DIR/default.profdata
+  - |
+    llvm-cov-$CLANG_VERSION \
+      export $BUILD_DIR_PATH/test/unit/unit_test \
+      -instr-profile=$TRAVIS_BUILD_DIR/default.profdata \
+      -format=lcov \
+      >$TRAVIS_BUILD_DIR/coverage.info
+  # Upload coverage data
+  - bash <(curl -s https://codecov.io/bash) -f $TRAVIS_BUILD_DIR/coverage.info
+notifications:
+  slack:
+    secure: "P3qNUGQQR6OP87peqoZkPN9zQYYP+/XyN/qvsdudFk35K9Le4utqZTC/DmKqRL9mLmwPhF+UzJ6sHeUJ9utSGE8P7hxu5KnfW8KEak/jlL1bmmcjpQPJcAaH1kyKXj/JEqevAAMHsJgULnJ2tu1fYV3dd4fok+jF5MXmizJzouerSNGwzHls7cN6xpXPjnciW7TkOSw0/G0taaK36NlJIp2hhjpiVi75reRchRO8FzCo9WTHcOgIXQHYXFPGjoNQ51xU6LVHK5fFc/EmIKPbYqb2GbXnxKTPCd6abPceRYUYmmsT1FytHyeUboxDlth8JnuzTGjzebKFzlb2EYDjGiNj8s5a1jSXQoJ2Sj+6dRlQAPMF0Dt4p6MKoWELv99RSY5kmmpw4Gniq0uy0NOq8N7XEo5SUY68QlZB3/z3yD3A4UVlmEqgBzHr+hpPZhy5Fb1eOpiMBVXww1LbKx2j8KxXVJ6iZ9mBWEoxAbqWRnaD7ZW4n1j5+s0yTrXQp7X+ZcPSqYUhiDFRp5SN4wNiTD2SpdN6oVhqOh5FStrNbVI01k0uQPzVZJIUhRaV21oJteZ6XbA4wmCDWVa8zLyxNtxaZE87m8yaNQUOsKICsBCWpbyPS5Z/BQyolZiYbBrDDIvaCLt7lxPauegiaGsyHMMnGzMsgS7S7xg1EFMtE9E="

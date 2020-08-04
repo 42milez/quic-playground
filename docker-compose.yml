@@ -1,0 +1,59 @@
+version: '3.8'
+x-volumes: &VOLUMES
+  volumes:
+    - cmake_build_debug_docker:/var/project/cmake-build-debug-docker
+    - cmake_build_release_docker:/var/project/cmake-build-release-docker
+    - log:/var/project/log
+    - ./lib:/var/project/lib:ro
+    - ./script:/var/project/script:ro
+    - ./src:/var/project/src:ro
+    - ./test:/var/project/test:ro
+    - ./CMakeLists.txt:/var/project/CMakeLists.txt:ro
+services:
+  base:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: base-quic:latest
+    stdin_open: true
+    tty: true
+  dev-server:
+    container_name: quic-dev-server
+    image: base-quic:latest
+    ports:
+      - '2222:22'
+      - '7777:7777'
+    volumes:
+      - cmake_build_debug_docker:/var/project/cmake-build-debug-docker
+  test:
+    command: >
+      bash -c "
+        script/build.sh &&
+        script/test.sh
+      "
+    container_name: quic-test
+    environment:
+      - BUILD_DIR_PATH=/var/project/cmake-build-debug-docker
+      - BUILD_TYPE=Debug
+    image: base-quic:latest
+    <<: *VOLUMES
+  release:
+    command: >
+      bash -c "
+        script/build.sh &&
+        script/test.sh &&
+        script/release.sh
+      "
+    container_name: quic-release
+    environment:
+      - BUILD_DIR_PATH=/var/project/cmake-build-release-docker
+      - BUILD_TYPE=Release
+    image: base-quic:latest
+    <<: *VOLUMES
+volumes:
+  cmake_build_debug_docker:
+    driver: local
+  cmake_build_release_docker:
+    driver: local
+  log:
+    driver: local

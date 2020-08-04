@@ -1,0 +1,16 @@
+Language: Cpp
+BasedOnStyle: Microsoft
+
+AccessModifierOffset: -4
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments: true
+AllowShortFunctionsOnASingleLine: All
+AlwaysBreakAfterReturnType: TopLevelDefinitions
+BraceWrapping:
+  AfterClass: false
+  AfterControlStatement: Never
+  AfterNamespace: true
+  SplitEmptyFunction: false
+BreakConstructorInitializers: BeforeComma
+IndentCaseLabels: true
+NamespaceIndentation: All
