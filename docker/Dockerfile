@@ -11,15 +11,18 @@ ARG CMAKE_VERSION=3.16.8
 
 ARG CATCH2_VERSION=2.13.0
 ARG CATCH2_URL=https://github.com/catchorg/Catch2/archive/v$CATCH2_VERSION.tar.gz
+ARG CATCH2_SRC_PATH=/usr/local/src/catch2
 
 ARG GITHUB_RELEASE_VERSION=0.8.1
 ARG GITHUB_RELEASE_URL=https://github.com/github-release/github-release/releases/download/v$GITHUB_RELEASE_VERSION/linux-amd64-github-release.bz2
 
 ARG LYRA_VERSION=1.4
 ARG LYRA_URL=https://github.com/bfgroup/Lyra/archive/$LYRA_VERSION.tar.gz
+ARG LYRA_SRC_PATH=/usr/local/src/lyra
 
 ARG SPDLOG_VERSION=1.7.0
 ARG SPDLOG_URL=https://github.com/gabime/spdlog/archive/v$SPDLOG_VERSION.tar.gz
+ARG SPDLOG_SRC_PATH=/usr/local/src/spdlog
 
 ENV CC clang-$CLANG_VERSION
 ENV CXX clang++-$CLANG_VERSION
@@ -69,22 +72,23 @@ RUN \
 # --------------------------------------------------
 RUN \
   # Catch2
-  curl -L $CATCH2_URL | tar zx -C $DOWNLOAD_PATH \
-  && cd $DOWNLOAD_PATH/Catch2-$CATCH2_VERSION \
+  mkdir -p $CATCH2_SRC_PATH \
+  && curl -L $CATCH2_URL | tar zx -C $CATCH2_SRC_PATH --strip-components=1 \
+  && cd $CATCH2_SRC_PATH \
   && cmake -Bbuild -H. -DBUILD_TESTING=OFF \
   && cmake --build build/ --target install \
   # Lyra
-  && curl -L $LYRA_URL | tar zx -C $DOWNLOAD_PATH \
-  && cp -pR $DOWNLOAD_PATH/Lyra-$LYRA_VERSION/data/single_include/lyra $INCLUDE_PATH/lyra \
-  && rm -rf $DOWNLOAD_PATH/Lyra-$LYRA_VERSION \
+  && mkdir -p $LYRA_SRC_PATH \
+  && curl -L $LYRA_URL | tar zx -C $LYRA_SRC_PATH \
+  && cp -pR $LYRA_SRC_PATH/data/single_include/lyra $INCLUDE_PATH/lyra \
   # spdlog
-  && curl -L $SPDLOG_URL | tar zx -C $DOWNLOAD_PATH \
-  && cd $DOWNLOAD_PATH/spdlog-$SPDLOG_VERSION \
+  && mkdir -p $SPDLOG_SRC_PATH \
+  && curl -L $SPDLOG_URL | tar zx -C $SPDLOG_SRC_PATH \
+  && cd $SPDLOG_SRC_PATH \
   && mkdir build \
   && cd build \
   && cmake .. \
-  && make -j \
-  && rm -rf $DOWNLOAD_PATH/spdlog-$SPDLOG_VERSION
+  && make -j
 
 #  Clean up the apt cache
 # --------------------------------------------------
