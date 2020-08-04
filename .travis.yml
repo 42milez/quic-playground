@@ -15,15 +15,16 @@ matrix:
         - CMAKE_VERSION=3.16.8
         - CTEST=$HOME/.local/bin/ctest
         # Libraries
+        - SRC_PATH=$HOME/.local/src
         - CATCH2_VERSION=2.13.0
         - CATCH2_URL=https://github.com/catchorg/Catch2/archive/v$CATCH2_VERSION.tar.gz
-        - CATCH2_SRC_PATH=$HOME/.local/src/catch2
+        - CATCH2_SRC_PATH=$SRC_PATH/catch2
         - LYRA_VERSION=1.4
         - LYRA_URL=https://github.com/bfgroup/Lyra/archive/$LYRA_VERSION.tar.gz
-        - LYRA_SRC_PATH=$HOME/.local/src/lyra
+        - LYRA_SRC_PATH=$SRC_PATH/lyra
         - SPDLOG_VERSION=1.7.0
         - SPDLOG_URL=https://github.com/gabime/spdlog/archive/v$SPDLOG_VERSION.tar.gz
-        - SPDLOG_SRC_PATH=$HOME/.local/src/spdlog
+        - SPDLOG_SRC_PATH=$SRC_PATH/spdlog
       addons:
         apt:
           update: true
