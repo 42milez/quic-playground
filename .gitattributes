@@ -1,0 +1,3 @@
+# External repositories
+/src/third_party/* linguist-vendored
+/lib/bash-utils/* linguist-vendored
