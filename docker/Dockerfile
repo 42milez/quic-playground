@@ -41,26 +41,18 @@ RUN \
     gdb \
     gdbserver \
     git \
-    openssh-server \
     rsync
-
-#  Install github-release
-# --------------------------------------------------
-RUN \
-  curl -L $GITHUB_RELEASE_URL -o linux-amd64-github-release.bz2 \
-  && bzip2 -d linux-amd64-github-release.bz2 \
-  && mv linux-amd64-github-release $BINARY_PATH/github-release \
-  && chmod 0700 $BINARY_PATH/github-release
 
 #  Enable SSH service
 # --------------------------------------------------
-# https://docs.docker.com/engine/examples/running_ssh_service/
+# https://docs.docker.com/engine/examples/running_ssh_service
 RUN \
-  echo root:root | chpasswd \
+  apt-get install -y \
+    openssh-server \
   && mkdir -p /var/run/sshd \
-  && sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
-  && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd \
-  && mkdir -p /root/.ssh
+  && echo "root:root" | chpasswd \
+  && sed -i "s/#PermitRootLogin prohibit-password/PermitRootLogin yes/" /etc/ssh/sshd_config \
+  && sed "s@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g" -i /etc/pam.d/sshd
 
 #  Install CMake
 # --------------------------------------------------
@@ -69,6 +61,14 @@ RUN \
     python3-pip \
   && python3 -m pip install --no-cache-dir --upgrade pip \
   && python3 -m pip install --no-cache-dir cmake==$CMAKE_VERSION
+
+#  Install github-release
+# --------------------------------------------------
+RUN \
+  curl -L $GITHUB_RELEASE_URL -o linux-amd64-github-release.bz2 \
+  && bzip2 -d linux-amd64-github-release.bz2 \
+  && mv linux-amd64-github-release $BINARY_PATH/github-release \
+  && chmod 0700 $BINARY_PATH/github-release
 
 #  Install libraries
 # --------------------------------------------------
@@ -100,4 +100,4 @@ WORKDIR $PROJECT_ROOT
 
 EXPOSE 22 7777
 
-CMD [ '/usr/sbin/sshd', '-D' ]
+CMD [ "/usr/sbin/sshd", "-D" ]
