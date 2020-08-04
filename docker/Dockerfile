@@ -31,7 +31,8 @@ ENV CTEST /usr/local/bin/ctest
 ENV SAN_SYMBOLIZER_PATH /usr/bin/llvm-symbolizer-$CLANG_VERSION
 
 RUN :'Install packages' \
-  && apt-get update && apt-get install -y \
+  && apt-get update \
+  && apt-get install -y \
     build-essential \
     clang-$CLANG_VERSION \
     curl \
