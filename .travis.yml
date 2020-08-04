@@ -58,12 +58,13 @@ install:
   # Install CMake
   - python3 -m pip install --no-cache-dir --upgrade pip
   - python3 -m pip install --no-cache-dir cmake==$CMAKE_VERSION
+  - $CMAKE --version
   # Install Catch2
-  - mkdir -p $CATCH2_SRC_PATH
-  - curl -L $CATCH2_URL | tar zx -C $CATCH2_SRC_PATH --strip-components=1
+  - git clone https://github.com/catchorg/Catch2.git $CATCH2_SRC_PATH
   - cd $CATCH2_SRC_PATH
-  - cmake -Bbuild -H. -DBUILD_TESTING=OFF
-  - cmake --build build/ --target install
+  - git checkout -b v$CATCH2_VERSION refs/tags/v$CATCH2_VERSION
+  - $CMAKE -Bbuild -H. -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=$HOME/.local
+  - $CMAKE --build build/ --target install
   # Install Lyra
   - mkdir -p $LYRA_SRC_PATH
   - curl -L $LYRA_URL | tar zx -C $LYRA_SRC_PATH --strip-components=1
@@ -74,10 +75,8 @@ install:
   - cd $SPDLOG_SRC_PATH
   - mkdir build
   - cd build
-  - cmake ..
+  - $CMAKE ..
   - make -j
-after_install:
-  - $CMAKE --version
 script:
   # Setup
   - cd $TRAVIS_BUILD_DIR
