@@ -99,4 +99,4 @@ after_success:
   - bash <(curl -s https://codecov.io/bash) -f $TRAVIS_BUILD_DIR/coverage.info
 notifications:
   slack:
-    secure: ""
+    secure: "sI8yzHpjEUk/M3ZgSnnIToHoSMbIIyJYPJ1pFKbFkPrzl1Zz7mCozEaPZ2cTJji9tLvCgNN0UEKbmmjjA+u+pJsk6q06dOfubm3CIh4ozMOwFR1qjYHmOYlxjGD2OiDttylMwV/0i3xo1dWoo4+mAaghm/85KByU5eVOVeO5pLappVwCRVGlCmgLIGuGqKNayI0/TwcOrVA8Ep+rv+SKmy3GLV0uJfztcu/UMvBlqyHjD0E64uCt5U7OkvdG3BPE0KBsMhy0T6OrULFkCQF2lA1eFns4PPD8zP3dc8h2fmK8DEzsKXZazyMtNad3YC0lPphPZ4Jz/ZFeCxIHMVqtHZnwzWZzp4aDW2mZnZ//C85pG6EC3VGArcYo2Rc1ZB4lTSWN68W0NZTV6phVjqF2P082bA78FpDmCjfxQI60eHlygTwT2sffjMp+h9TaL0BwYUw6TbjZIh/6hGiNVfmpsZ6aZz7t2Xf/wOvtIcIqLDf7Tbr5pNlylpZRpQZexZgoIG++V0zS8NEUvvUuwp2ois9E/E24GMrc8CejOM3VokIAEIuwtoKkDQyMSXrqc5BpZioB9DczJ0yG14IDk+Ol7T/MNho9UOX2ro4rg6CxxRWpUmUy/OXrHmTJX3l+nzu6Y7kjwn0SrHzku9F0khFl7n0HZiMFdyngNrwSI2Axg9M="
