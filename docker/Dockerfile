@@ -30,10 +30,8 @@ ENV CMAKE /usr/local/bin/cmake
 ENV CTEST /usr/local/bin/ctest
 ENV SAN_SYMBOLIZER_PATH /usr/bin/llvm-symbolizer-$CLANG_VERSION
 
-#  Install packages
-# --------------------------------------------------
-RUN \
-  apt-get update && apt-get install -y \
+RUN :'Install packages' \
+  && apt-get update && apt-get install -y \
     build-essential \
     clang-$CLANG_VERSION \
     curl \
@@ -43,59 +41,51 @@ RUN \
     openssh-server \
     rsync
 
-#  Install github-release
-# --------------------------------------------------
-RUN \
-  curl -L $GITHUB_RELEASE_URL -o linux-amd64-github-release.bz2 \
+RUN :'Install github-release' \
+  && curl -L $GITHUB_RELEASE_URL -o linux-amd64-github-release.bz2 \
   && bzip2 -d linux-amd64-github-release.bz2 \
   && mv linux-amd64-github-release $BINARY_PATH/github-release \
   && chmod 0700 $BINARY_PATH/github-release
 
-#  Enable SSH service: https://docs.docker.com/engine/examples/running_ssh_service/
-# --------------------------------------------------
-RUN \
-  echo root:root | chpasswd \
+# https://docs.docker.com/engine/examples/running_ssh_service/
+RUN :'Enable SSH service' \
+  && echo root:root | chpasswd \
   && mkdir -p /var/run/sshd \
   && sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
   && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd \
   && mkdir -p /root/.ssh
 
-#  Install CMake
-# --------------------------------------------------
-RUN \
-  apt-get install -y \
+RUN :'Install CMake' \
+  && apt-get install -y
     python3-pip \
   && python3 -m pip install --no-cache-dir --upgrade pip \
   && python3 -m pip install --no-cache-dir cmake==$CMAKE_VERSION
 
-#  Install libraries
-# --------------------------------------------------
-RUN \
+RUN :'Install libraries' \
   # Catch2
-  mkdir -p $CATCH2_SRC_PATH \
+  && mkdir -p $CATCH2_SRC_PATH \
   && curl -L $CATCH2_URL | tar zx -C $CATCH2_SRC_PATH --strip-components=1 \
   && cd $CATCH2_SRC_PATH \
   && cmake -Bbuild -H. -DBUILD_TESTING=OFF \
   && cmake --build build/ --target install \
   # Lyra
   && mkdir -p $LYRA_SRC_PATH \
-  && curl -L $LYRA_URL | tar zx -C $LYRA_SRC_PATH \
+  && curl -L $LYRA_URL | tar zx -C $LYRA_SRC_PATH --strip-components=1 \
   && cp -pR $LYRA_SRC_PATH/data/single_include/lyra $INCLUDE_PATH/lyra \
   # spdlog
   && mkdir -p $SPDLOG_SRC_PATH \
-  && curl -L $SPDLOG_URL | tar zx -C $SPDLOG_SRC_PATH \
+  && curl -L $SPDLOG_URL | tar zx -C $SPDLOG_SRC_PATH --strip-components=1 \
   && cd $SPDLOG_SRC_PATH \
   && mkdir build \
   && cd build \
   && cmake .. \
   && make -j
 
-#  Clean up the apt cache
-# --------------------------------------------------
-RUN rm -rf /var/lib/apt/lists/*
+RUN :'Clean up the apt cache' \
+  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR $PROJECT_ROOT
 
 EXPOSE 22 7777
 
-CMD [ "/usr/sbin/sshd", "-D" ]
+CMD [ '/usr/sbin/sshd', '-D' ]
