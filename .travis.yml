@@ -69,7 +69,7 @@ install:
   - git clone $LYRA_REPO $LYRA_SRC_PATH
   - cd $LYRA_SRC_PATH
   - git checkout -b $LYRA_VERSION refs/tags/$LYRA_VERSION
-  - cp -pR $LYRA_SRC_PATH/data/single_include/lyra $CMAKE_INCLUDE_PATH/lyra
+  - cp -pvR $LYRA_SRC_PATH/data/single_include/lyra $CMAKE_INCLUDE_PATH/lyra
   # Install spdlog
   - git clone $SPDLOG_REPO $SPDLOG_SRC_PATH
   - cd $SPDLOG_SRC_PATH

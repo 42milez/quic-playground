@@ -5,4 +5,4 @@ source lib/bash-utils/main.sh "$(pwd)/lib/bash-utils"
 
 cd $BUILD_DIR_PATH || exit
 
-$CTEST --output-on-failure
+ctest --output-on-failure
