@@ -1,7 +1,7 @@
-#ifndef QUIC_PLAYGROUND_SERVER_QUIC_TOY_SERVER_H_
-#define QUIC_PLAYGROUND_SERVER_QUIC_TOY_SERVER_H_
+#ifndef QUIC_TOY_SERVER_H_
+#define QUIC_TOY_SERVER_H_
 
-#include "../core/proof_source.h"
+#include "core/proof_source.h"
 #include "quic_simple_server_backend.h"
 #include "quic_spdy_server_base.h"
 #include <memory>
@@ -39,4 +39,4 @@ private:
 };
 } // namespace quic
 
-#endif // QUIC_PLAYGROUND_SERVER_QUIC_TOY_SERVER_H_
+#endif // QUIC_TOY_SERVER_H_

@@ -1,5 +1,5 @@
-#ifndef QUIC_PLAYGROUND_CORE_QUIC_VERSIONS_H_
-#define QUIC_PLAYGROUND_CORE_QUIC_VERSIONS_H_
+#ifndef CORE_QUIC_VERSIONS_H_
+#define CORE_QUIC_VERSIONS_H_
 
 #include <vector>
 
@@ -36,4 +36,4 @@ struct ParsedQuicVersion {
 using ParsedQuicVersionVector = std::vector<ParsedQuicVersion>;
 } // namespace quic
 
-#endif // QUIC_PLAYGROUND_CORE_QUIC_VERSIONS_H_
+#endif // CORE_QUIC_VERSIONS_H_

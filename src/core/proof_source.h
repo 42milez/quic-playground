@@ -1,5 +1,5 @@
-#ifndef QUIC_PLAYGROUND_CORE_PROOF_SOURCE_H_
-#define QUIC_PLAYGROUND_CORE_PROOF_SOURCE_H_
+#ifndef CORE_PROOF_SOURCE_H_
+#define CORE_PROOF_SOURCE_H_
 
 namespace quic
 {
@@ -9,4 +9,4 @@ public:
 };
 } // namespace quic
 
-#endif // QUIC_PLAYGROUND_CORE_PROOF_SOURCE_H_
+#endif // CORE_PROOF_SOURCE_H_

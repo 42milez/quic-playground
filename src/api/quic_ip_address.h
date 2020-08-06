@@ -1,5 +1,5 @@
-#ifndef QUIC_PLAYGROUND_API_QUIC_IP_ADDRESS_H_
-#define QUIC_PLAYGROUND_API_QUIC_IP_ADDRESS_H_
+#ifndef API_QUIC_IP_ADDRESS_H_
+#define API_QUIC_IP_ADDRESS_H_
 
 #include "quic_ip_address_family.h"
 #include <netinet/in.h>
@@ -30,4 +30,4 @@ private:
 };
 } // namespace quic
 
-#endif // QUIC_PLAYGROUND_API_QUIC_IP_ADDRESS_H_
+#endif // API_QUIC_IP_ADDRESS_H_

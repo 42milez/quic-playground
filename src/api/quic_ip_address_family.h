@@ -1,5 +1,5 @@
-#ifndef QUIC_PLAYGROUND_API_QUIC_IP_ADDRESS_FAMILY_H_
-#define QUIC_PLAYGROUND_API_QUIC_IP_ADDRESS_FAMILY_H_
+#ifndef API_QUIC_IP_ADDRESS_FAMILY_H_
+#define API_QUIC_IP_ADDRESS_FAMILY_H_
 
 namespace quic
 {
@@ -10,4 +10,4 @@ enum class IpAddressFamily {
 };
 } // namespace quic
 
-#endif // QUIC_PLAYGROUND_API_QUIC_IP_ADDRESS_FAMILY_H_
+#endif // API_QUIC_IP_ADDRESS_FAMILY_H_

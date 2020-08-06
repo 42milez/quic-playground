@@ -1,5 +1,5 @@
-#include "server/quic_epoll_server_factory.h"
-#include "server/quic_toy_server.h"
+#include "quic_epoll_server_factory.h"
+#include "quic_toy_server.h"
 
 int
 main(int argc, char *argv[])

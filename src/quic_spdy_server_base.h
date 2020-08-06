@@ -1,7 +1,7 @@
-#ifndef QUIC_PLAYGROUND_SERVER_QUIC_SPDY_SERVER_BASE_H_
-#define QUIC_PLAYGROUND_SERVER_QUIC_SPDY_SERVER_BASE_H_
+#ifndef QUIC_SPDY_SERVER_BASE_H_
+#define QUIC_SPDY_SERVER_BASE_H_
 
-#include "../api/quic_socket_address.h"
+#include "api/quic_socket_address.h"
 
 namespace quic
 {
@@ -13,4 +13,4 @@ public:
 };
 } // namespace quic
 
-#endif // QUIC_PLAYGROUND_SERVER_QUIC_SPDY_SERVER_BASE_H_
+#endif // QUIC_SPDY_SERVER_BASE_H_
