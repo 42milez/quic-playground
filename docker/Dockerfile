@@ -12,7 +12,6 @@ ARG CATCH2_VERSION=2.13.0
 ARG CLANG_VERSION=10
 ARG CMAKE_VERSION=3.16.8
 ARG GITHUB_RELEASE_VERSION=0.8.1
-ARG LIBEVENT_VERSION=2.1.12
 ARG LYRA_VERSION=1.4
 ARG SPDLOG_VERSION=1.7.0
 
@@ -34,8 +33,6 @@ RUN \
     openssh-server \
     python3-pip \
     rsync \
-    # for libevent
-    libssl-dev \
   && rm -rf /var/lib/apt/lists/*
 
 #  Enable SSH service
@@ -62,15 +59,6 @@ RUN \
   && git checkout -b v$CATCH2_VERSION refs/tags/v$CATCH2_VERSION \
   && cmake -Bbuild -H. -DBUILD_TESTING=OFF \
   && cmake --build build/ --target install \
-  # libevent
-  && git clone https://github.com/libevent/libevent.git $SRC_PATH/libevent \
-  && cd $SRC_PATH/libevent \
-  && git checkout -b release-$LIBEVENT_VERSION-stable refs/tags/release-$LIBEVENT_VERSION-stable \
-  && mkdir build \
-  && cd build \
-  && cmake .. \
-  && make -j \
-  && make install \
   # Lyra
   && git clone https://github.com/bfgroup/Lyra.git $SRC_PATH/lyra \
   && cd $SRC_PATH/lyra \

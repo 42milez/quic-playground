@@ -2,6 +2,7 @@
 #define EPOLL_SERVER_SIMPLE_EPOLL_SERVER_H_
 
 #include <map>
+#include <sys/queue.h>
 
 namespace quic
 {
