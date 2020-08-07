@@ -70,6 +70,7 @@ RUN \
   && cd build \
   && cmake .. \
   && make -j \
+  && make install \
   # Lyra
   && git clone https://github.com/bfgroup/Lyra.git $SRC_PATH/lyra \
   && cd $SRC_PATH/lyra \
@@ -82,7 +83,8 @@ RUN \
   && mkdir build \
   && cd build \
   && cmake .. \
-  && make -j
+  && make -j \
+  && make install
 
 #  Install github-release
 # --------------------------------------------------

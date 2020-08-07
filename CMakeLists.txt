@@ -14,6 +14,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_INCLUDE_PATH "/usr/local/include")
 
+find_package(Catch2 CONFIG REQUIRED)
+find_package(Libevent CONFIG REQUIRED core)
+find_package(spdlog CONFIG REQUIRED)
+
 enable_testing()
 
 if ($ENV{COVERAGE})

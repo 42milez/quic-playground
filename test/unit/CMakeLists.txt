@@ -1,5 +1,3 @@
-find_package(Catch2 REQUIRED)
-
 add_executable(unit_test main.cc)
 add_subdirectory(core)
 add_subdirectory(epoll)
