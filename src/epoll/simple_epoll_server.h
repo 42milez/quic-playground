@@ -2,7 +2,10 @@
 #define EPOLL_SERVER_SIMPLE_EPOLL_SERVER_H_
 
 #include <map>
+#include <memory>
+#include <sys/epoll.h>
 #include <sys/queue.h>
+#include <unordered_set>
 
 namespace quic
 {
@@ -91,9 +94,7 @@ public:
 
     static std::string EventMaskToString(int event_mask);
     void LogStateOnCrash();
-    void set_timeout_in_us(int64_t timeout_in_us) {
-        timeout_in_us_ = timeout_in_us;
-    }
+    void set_timeout_in_us(int64_t timeout_in_us) { timeout_in_us_ = timeout_in_us; }
     int timeout_in_us_for_test() const { return timeout_in_us_; }
     bool in_shutdown() const { return in_shutdown_; }
     void Shutdown() {}
@@ -104,31 +105,33 @@ protected:
     virtual void SetNonblocking(int fd);
     virtual int epoll_wait_impl(int epfd, struct epoll_event *events, int max_events, int timeout_in_ms);
 
-    struct CBAndEventMask {
-        CBAndEventMask() : cb(nullptr),
-            fd(-1),
-            event_mask(0),
-            events_asserted(0),
-            events_to_fake(0),
-            in_use(false) {
+    struct CBAndEventMask
+    {
+        CBAndEventMask()
+            : cb(nullptr)
+            , fd(-1)
+            , event_mask(0)
+            , events_asserted(0)
+            , events_to_fake(0)
+            , in_use(false)
+        {
             entry.le_next = nullptr;
             entry.le_prev = nullptr;
         }
 
-        CBAndEventMask(EpollCallbackInterface *cb, int event_mask, int fd) :
-            cb(cb),
-            fd(fd),
-            event_mask(event_mask),
-            events_asserted(0),
-            events_to_fake(0),
-            in_use(false) {
+        CBAndEventMask(EpollCallbackInterface *cb, int event_mask, int fd)
+            : cb(cb)
+            , fd(fd)
+            , event_mask(event_mask)
+            , events_asserted(0)
+            , events_to_fake(0)
+            , in_use(false)
+        {
             entry.le_next = nullptr;
             entry.le_prev = nullptr;
         }
 
-        bool operator==(const CBAndEventMask &cb_and_mask) const {
-            return fd == cb_and_mask.fd;
-        }
+        bool operator==(const CBAndEventMask &cb_and_mask) const { return fd == cb_and_mask.fd; }
 
         mutable EpollCallbackInterface *cb;
         mutable LIST_ENTRY(CBAndEventMask) entry;
@@ -138,6 +141,104 @@ protected:
         mutable int events_to_fake;
         mutable bool in_use;
     };
+
+    struct CBAndEventMaskHash
+    {
+        size_t operator()(const CBAndEventMask &cb_and_eventmask) const
+        {
+            return static_cast<size_t>(cb_and_eventmask.fd);
+        }
+    };
+
+    using FDToCBMap = std::unordered_set<CBAndEventMask, CBAndEventMaskHash>;
+
+    virtual void DelFD(int fd) const;
+    virtual void AddFD(int fd, int event_mask) const;
+    virtual void ModFD(int fd, int event_mask) const;
+    virtual void ModifyFD(int fd, int remove_event, int add_event);
+
+    virtual void WaitForEventsAndCallHandleEvents(int64_t timeout_in_us, struct epoll_event events[], int events_size);
+
+    void AddToReadyList(CBAndEventMask *cb_and_mask);
+    void RemoveFromReadyList(const CBAndEventMask &cb_and_mask);
+
+    virtual void CallAndReregisterAlarmEvents();
+
+    int epoll_fd_;
+
+    FDToCBMap cb_map_;
+
+    struct AlarmCBHash
+    {
+        size_t operator()(AlarmCB *const &p) const { return reinterpret_cast<size_t>(p); }
+    };
+
+    using AlarmCBMap = std::unordered_set<AlarmCB *, AlarmCBHash>;
+
+    AlarmCBMap all_alarms_;
+    TimeToAlarmCBMap alarm_map_;
+
+    int64_t timeout_in_us_;
+    int64_t recorded_now_in_us_;
+
+    AlarmCBMap alarms_reregistered_and_should_be_skipped_;
+
+    LIST_HEAD(ReadyList, CBAndEventMask) ready_list_;
+    LIST_HEAD(TmpList, CBAndEventMask) tmp_list_;
+
+    int ready_list_size_;
+    static const int events_size_ = 256;
+    struct epoll_event events_[256];
+
+#ifdef EPOLL_SERVER_EVENT_TRACING
+    // ...
+#endif
+
+private:
+    void CleanupFDToMap();
+    void CleanupTimeToAlarmDBMap();
+
+    std::unique_ptr<ReadPipeCallback> wake_cb_;
+
+    int read_fd_;
+    int write_fd_;
+    bool in_wait_for_events_and_execute_callbacks_;
+    bool in_shutdown_;
+    int64_t last_delay_in_usec_;
+};
+
+class EpollAlarmCallbackInterface {
+public:
+    virtual int64_t OnAlarm() = 0;
+    virtual void OnRegistration(const SimpleEpollServer::AlarmRegToken &token, SimpleEpollServer *eps) = 0;
+    virtual void OnUnregistration() = 0;
+    virtual void OnShutdown(SimpleEpollServer *eps) = 0;
+
+    virtual ~EpollAlarmCallbackInterface() {}
+
+protected:
+    EpollAlarmCallbackInterface() {}
+};
+
+class EpollAlarm : public EpollAlarmCallbackInterface {
+public:
+    EpollAlarm();
+
+    ~EpollAlarm();
+
+    int64_t OnAlarm() override;
+    void OnRegistration(const SimpleEpollServer::AlarmRegToken &token, SimpleEpollServer *eps) override;
+    void OnUnregistration() override;
+    void OnShutdown(SimpleEpollServer *eps) override;
+    void UnregisterIfRegistered();
+    void ReregisterAlarm(int64_t timeout_time_in_us);
+    bool registered() const { return registered_; }
+    const SimpleEpollServer *eps() const { return eps_; }
+
+private:
+    SimpleEpollServer::AlarmRegToken token_;
+    SimpleEpollServer *eps_;
+    bool registered_;
 };
 } // namespace quic
 
