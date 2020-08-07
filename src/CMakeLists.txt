@@ -1,3 +1,4 @@
 add_executable(quic main.cc)
 add_subdirectory(core)
-target_link_libraries(quic core)
+add_subdirectory(epoll_server)
+target_link_libraries(quic core epoll_server)

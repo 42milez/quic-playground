@@ -4,7 +4,7 @@ if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.13)
     cmake_policy(SET CMP0076 NEW)
 endif ()
 
-project(quic)
+project(quic-playground)
 set(PROJECT_VERSION 1.0.0)
 
 set(CMAKE_CXX_EXTENSIONS OFF)
