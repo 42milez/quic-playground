@@ -12,6 +12,7 @@ ARG CATCH2_VERSION=2.13.0
 ARG CLANG_VERSION=10
 ARG CMAKE_VERSION=3.16.8
 ARG GITHUB_RELEASE_VERSION=0.8.1
+ARG LIBEVENT_VERSION=2.1.12
 ARG LYRA_VERSION=1.4
 ARG SPDLOG_VERSION=1.7.0
 
@@ -30,15 +31,18 @@ RUN \
     gdb \
     gdbserver \
     git \
-    rsync
+    openssh-server \
+    python3-pip \
+    rsync \
+    # for libevent
+    libssl-dev \
+  && rm -rf /var/lib/apt/lists/*
 
 #  Enable SSH service
 # --------------------------------------------------
 # https://docs.docker.com/engine/examples/running_ssh_service
 RUN \
-  apt-get install -y \
-    openssh-server \
-  && mkdir -p /var/run/sshd \
+  mkdir -p /var/run/sshd \
   && echo "root:root" | chpasswd \
   && sed -i "s/#PermitRootLogin prohibit-password/PermitRootLogin yes/" /etc/ssh/sshd_config \
   && sed "s@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g" -i /etc/pam.d/sshd
@@ -46,9 +50,7 @@ RUN \
 #  Install CMake
 # --------------------------------------------------
 RUN \
-  apt-get install -y \
-    python3-pip \
-  && python3 -m pip install --no-cache-dir --upgrade pip \
+  python3 -m pip install --no-cache-dir --upgrade pip \
   && python3 -m pip install --no-cache-dir cmake==$CMAKE_VERSION
 
 #  Install libraries
@@ -60,6 +62,14 @@ RUN \
   && git checkout -b v$CATCH2_VERSION refs/tags/v$CATCH2_VERSION \
   && cmake -Bbuild -H. -DBUILD_TESTING=OFF \
   && cmake --build build/ --target install \
+  # libevent
+  && git clone https://github.com/libevent/libevent.git $SRC_PATH/libevent \
+  && cd $SRC_PATH/libevent \
+  && git checkout -b release-$LIBEVENT_VERSION-stable refs/tags/release-$LIBEVENT_VERSION-stable \
+  && mkdir build \
+  && cd build \
+  && cmake .. \
+  && make -j \
   # Lyra
   && git clone https://github.com/bfgroup/Lyra.git $SRC_PATH/lyra \
   && cd $SRC_PATH/lyra \
@@ -83,10 +93,6 @@ RUN \
   && bzip2 -d linux-amd64-github-release.bz2 \
   && mv linux-amd64-github-release $BINARY_PATH/github-release \
   && chmod 0700 $BINARY_PATH/github-release
-
-#  Clean up the apt cache
-# --------------------------------------------------
-RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR $PROJECT_ROOT
 
