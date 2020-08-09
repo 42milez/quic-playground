@@ -39,7 +39,6 @@ if (CMAKE_BUILD_TYPE STREQUAL Release)
     message(STATUS "CMAKE_CXX_FLAGS_RELEASE: ${CMAKE_CXX_FLAGS_RELEASE}")
 endif ()
 
-include_directories("${PROJECT_SOURCE_DIR}/lib/chromium")
 add_subdirectory(lib/chromium)
 add_subdirectory(src)
 add_subdirectory(test/unit)

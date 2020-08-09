@@ -38,3 +38,4 @@ target_sources(chromium PRIVATE
     base/template_util.h
     build/build_config.h
     build/buildflag.h)
+target_include_directories(chromium PRIVATE "${PROJECT_SOURCE_DIR}/lib/chromium")
