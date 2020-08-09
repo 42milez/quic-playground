@@ -7,6 +7,10 @@
 #include <sys/queue.h>
 #include <unordered_set>
 
+#ifdef EPOLL_SERVER_EVENT_TRACING
+#include <ostream>
+#endif
+
 namespace quic
 {
 class SimpleEpollServer;
@@ -81,7 +85,7 @@ public:
 
     void RegisterAlarmApproximateDelta(int64_t delta_in_us, AlarmCB *ac)
     {
-        RegisterAlarm(ApprozimateNowInUsec() + delta_in_us, ac);
+        RegisterAlarm(ApproximateNowInUsec() + delta_in_us, ac);
     }
 
     virtual void UnregisterAlarm(const SimpleEpollServer::AlarmRegToken &iterator_token);
@@ -187,7 +191,7 @@ protected:
     LIST_HEAD(TmpList, CBAndEventMask) tmp_list_;
 
     int ready_list_size_;
-    static const int events_size_ = 256;
+    static constexpr int events_size_ = 256;
     struct epoll_event events_[256];
 
 #ifdef EPOLL_SERVER_EVENT_TRACING
@@ -233,7 +237,7 @@ public:
     void UnregisterIfRegistered();
     void ReregisterAlarm(int64_t timeout_time_in_us);
     bool registered() const { return registered_; }
-    const SimpleEpollServer *eps() const { return eps_; }
+    constexpr SimpleEpollServer *eps() const { return eps_; }
 
 private:
     SimpleEpollServer::AlarmRegToken token_;
