@@ -1,10 +1,13 @@
 add_library(chromium STATIC)
 target_sources(chromium PRIVATE
+    base/containers/queue.h
     base/numerics/checked_math.h
     base/numerics/checked_math_impl.h
     base/numerics/clamped_math.h
     base/numerics/safe_conversions.h
+    base/numerics/safe_conversions_impl.h
     base/numerics/safe_math.h
+    base/numerics/safe_math_clang_gcc_impl.h
     base/numerics/safe_math_shared_impl.h
     base/strings/char_traits.h
     base/strings/string16.cc
@@ -14,11 +17,15 @@ target_sources(chromium PRIVATE
     base/strings/string_piece_forward.h
     base/strings/stringprintf.h
     base/strings/utf_string_conversions.h
+    base/task/common/task_annotator.h
     base/third_party/nspr/prtime.h
     base/time/time.cc
     base/time/time.h
     base/time/time_override.h
+    base/trace_event/base_tracing.h
+    base/trace_event/trace_event_stub.h
     base/base_export.h
+    base/callback.h
     base/callback_forward.h
     base/check.cc
     base/check.h
@@ -27,15 +34,20 @@ target_sources(chromium PRIVATE
     base/compiler_specific.h
     base/dcheck_is_on.h
     base/immediate_crash.h
+    base/location.h
     base/logging.cc
     base/logging.h
     base/logging_buildflags.h
     base/macros.h
     base/no_destructor.h
+    base/notreached.cc
     base/notreached.h
     base/optional.h
+    base/pending_task.h
     base/scoped_clear_last_error.h
+    base/stl_util.h
     base/template_util.h
+    base/tracing_buildflags.h
     build/build_config.h
     build/buildflag.h)
 target_include_directories(chromium PRIVATE "${PROJECT_SOURCE_DIR}/lib/chromium")
