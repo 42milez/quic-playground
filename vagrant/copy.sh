@@ -156,3 +156,6 @@ scp "$HOST:$CHROMIUM_REMOTE_DIR/build/build_config.h" $CHROMIUM_LOCAL_DIR/build
 
 mkdir -p $CHROMIUM_LOCAL_DIR/testing/gtest/include/gtest
 scp "$HOST:$CHROMIUM_REMOTE_DIR/testing/gtest/include/gtest/gtest_prod.h" $CHROMIUM_LOCAL_DIR/testing/gtest/include/gtest
+
+mkdir -p $CHROMIUM_LOCAL_DIR/third_party/googletest/src/googletest/include/gtest
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/googletest/src/googletest/include/gtest/gtest_prod.h" $CHROMIUM_LOCAL_DIR/third_party/googletest/src/googletest/include/gtest
