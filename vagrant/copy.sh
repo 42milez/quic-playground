@@ -31,6 +31,7 @@ scp "$HOST:$CHROMIUM_REMOTE_DIR/base/atomicops.h" $CHROMIUM_LOCAL_DIR/base
 scp "$HOST:$CHROMIUM_REMOTE_DIR/base/atomicops_internals_portable.h" $CHROMIUM_LOCAL_DIR/base
 scp "$HOST:$CHROMIUM_REMOTE_DIR/base/base_export.h" $CHROMIUM_LOCAL_DIR/base
 scp "$HOST:$CHROMIUM_REMOTE_DIR/base/bind.h" $CHROMIUM_LOCAL_DIR/base
+scp "$HOST:$CHROMIUM_REMOTE_DIR/base/bind_internal.h" $CHROMIUM_LOCAL_DIR/base
 scp "$HOST:$CHROMIUM_REMOTE_DIR/base/callback.h" $CHROMIUM_LOCAL_DIR/base
 scp "$HOST:$CHROMIUM_REMOTE_DIR/base/callback_forward.h" $CHROMIUM_LOCAL_DIR/base
 scp "$HOST:$CHROMIUM_REMOTE_DIR/base/callback_internal.h" $CHROMIUM_LOCAL_DIR/base
@@ -147,7 +148,6 @@ scp "$HOST:$CHROMIUM_REMOTE_DIR/base/trace_event/typed_macros_embedder_support.h
 scp "$HOST:$CHROMIUM_REMOTE_DIR/base/trace_event/typed_macros_internal.h" $CHROMIUM_LOCAL_DIR/base/trace_event
 scp "$HOST:$CHROMIUM_REMOTE_DIR/base/trace_event/common/trace_event_common.h" $CHROMIUM_LOCAL_DIR/base/trace_event/common
 scp "$HOST:$CHROMIUM_REMOTE_DIR/out/Debug/gen/base/logging_buildflags.h" $CHROMIUM_LOCAL_DIR/base
-scp "$HOST:$CHROMIUM_REMOTE_DIR/out/Debug/gen/base/logging_buildflags.h" $CHROMIUM_LOCAL_DIR/base
 scp "$HOST:$CHROMIUM_REMOTE_DIR/out/Debug/gen/base/tracing_buildflags.h" $CHROMIUM_LOCAL_DIR/base
 scp "$HOST:$CHROMIUM_REMOTE_DIR/out/Debug/gen/base/debug/debugging_buildflags.h" $CHROMIUM_LOCAL_DIR/base/debug
 
@@ -159,11 +159,54 @@ mkdir -p $CHROMIUM_LOCAL_DIR/testing/gtest/include/gtest
 scp "$HOST:$CHROMIUM_REMOTE_DIR/testing/gtest/include/gtest/gtest_prod.h" $CHROMIUM_LOCAL_DIR/testing/gtest/include/gtest
 
 mkdir -p $CHROMIUM_LOCAL_DIR/third_party/googletest/src/googletest/include/gtest
+mkdir -p $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/base
 mkdir -p $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/protozero
 mkdir -p $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/tracing
+mkdir -p $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/tracing/core
+mkdir -p $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/tracing/internal
+mkdir -p $CHROMIUM_LOCAL_DIR/third_party/perfetto/protos/perfetto/common
+mkdir -p $CHROMIUM_LOCAL_DIR/third_party/perfetto/protos/perfetto/trace/interned_data
 mkdir -p $CHROMIUM_LOCAL_DIR/third_party/perfetto/protos/perfetto/trace/track_event
 scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/googletest/src/googletest/include/gtest/gtest_prod.h" $CHROMIUM_LOCAL_DIR/third_party/googletest/src/googletest/include/gtest
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/base/build_config.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/base
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/base/compiler.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/base
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/base/export.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/base
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/base/flat_set.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/base
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/base/logging.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/base
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/base/proc_utils.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/base
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/base/thread_utils.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/base
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/protozero/contiguous_memory_range.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/protozero
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/protozero/copyable_ptr.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/protozero
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/protozero/cpp_message_obj.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/protozero
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/protozero/field.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/protozero
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/protozero/message.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/protozero
 scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/protozero/message_handle.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/protozero
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/protozero/packed_repeated_fields.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/protozero
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/protozero/proto_decoder.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/protozero
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/protozero/proto_utils.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/protozero
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/protozero/scattered_heap_buffer.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/protozero
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/protozero/scattered_stream_writer.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/protozero
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/tracing/debug_annotation.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/tracing
 scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/tracing/event_context.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/tracing
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/tracing/trace_writer_base.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/tracing
 scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/tracing/track.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/tracing
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/tracing/core/forward_decls.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/tracing/core
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/tracing/internal/track_event_internal.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/tracing/internal
+scp "$HOST:$CHROMIUM_REMOTE_DIR/out/Debug/gen/third_party/perfetto/build_config/perfetto_build_flags.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/base
+scp "$HOST:$CHROMIUM_REMOTE_DIR/out/Debug/gen/third_party/perfetto/protos/perfetto/common/builtin_clock.pbzero.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/protos/perfetto/common
+scp "$HOST:$CHROMIUM_REMOTE_DIR/out/Debug/gen/third_party/perfetto/protos/perfetto/trace/trace_packet.pbzero.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/protos/perfetto/trace
+scp "$HOST:$CHROMIUM_REMOTE_DIR/out/Debug/gen/third_party/perfetto/protos/perfetto/trace/interned_data/interned_data.pbzero.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/protos/perfetto/trace/interned_data
+scp "$HOST:$CHROMIUM_REMOTE_DIR/out/Debug/gen/third_party/perfetto/protos/perfetto/trace/track_event/debug_annotation.pbzero.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/protos/perfetto/trace/track_event
+scp "$HOST:$CHROMIUM_REMOTE_DIR/out/Debug/gen/third_party/perfetto/protos/perfetto/trace/track_event/track_descriptor.gen.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/protos/perfetto/trace/track_event
+scp "$HOST:$CHROMIUM_REMOTE_DIR/out/Debug/gen/third_party/perfetto/protos/perfetto/trace/track_event/track_descriptor.pbzero.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/protos/perfetto/trace/track_event
 scp "$HOST:$CHROMIUM_REMOTE_DIR/out/Debug/gen/third_party/perfetto/protos/perfetto/trace/track_event/track_event.pbzero.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/protos/perfetto/trace/track_event
+
+PERFETTO_SYMLINK=$CHROMIUM_LOCAL_DIR/perfetto
+if [ ! -e "$PERFETTO_SYMLINK" ]; then
+  ln -s "$(pwd)/$CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto" $PERFETTO_SYMLINK
+fi
+
+PERFETTO_PROTO_SYMLINK=$CHROMIUM_LOCAL_DIR/protos
+if [ ! -e "$PERFETTO_PROTO_SYMLINK" ]; then
+  ln -s "$(pwd)/$CHROMIUM_LOCAL_DIR/third_party/perfetto/protos" $PERFETTO_PROTO_SYMLINK
+fi
