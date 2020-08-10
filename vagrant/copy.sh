@@ -174,8 +174,7 @@ readonly FILES=(
   third_party/perfetto/include/perfetto/tracing/internal/track_event_internal.h
 )
 
-for file in "${FILES[@]}"
-do
+for file in "${FILES[@]}"; do
   dir=$(dirname "$file")
   dir="$CHROMIUM_LOCAL_DIR/$(echo "${dir#*out/Debug/gen/}")"
   mkdir -p "$dir"
