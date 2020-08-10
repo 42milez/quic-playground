@@ -104,6 +104,7 @@ scp "$HOST:$CHROMIUM_REMOTE_DIR/base/strings/string16.cc" $CHROMIUM_LOCAL_DIR/ba
 scp "$HOST:$CHROMIUM_REMOTE_DIR/base/strings/string16.h" $CHROMIUM_LOCAL_DIR/base/strings
 scp "$HOST:$CHROMIUM_REMOTE_DIR/base/strings/stringprintf.h" $CHROMIUM_LOCAL_DIR/base/strings
 scp "$HOST:$CHROMIUM_REMOTE_DIR/base/strings/utf_string_conversions.h" $CHROMIUM_LOCAL_DIR/base/strings
+scp "$HOST:$CHROMIUM_REMOTE_DIR/base/synchronization/atomic_flag.h" $CHROMIUM_LOCAL_DIR/base/synchronization
 scp "$HOST:$CHROMIUM_REMOTE_DIR/base/synchronization/condition_variable.h" $CHROMIUM_LOCAL_DIR/base/synchronization
 scp "$HOST:$CHROMIUM_REMOTE_DIR/base/synchronization/lock.h" $CHROMIUM_LOCAL_DIR/base/synchronization
 scp "$HOST:$CHROMIUM_REMOTE_DIR/base/synchronization/lock_impl.h" $CHROMIUM_LOCAL_DIR/base/synchronization
@@ -158,4 +159,11 @@ mkdir -p $CHROMIUM_LOCAL_DIR/testing/gtest/include/gtest
 scp "$HOST:$CHROMIUM_REMOTE_DIR/testing/gtest/include/gtest/gtest_prod.h" $CHROMIUM_LOCAL_DIR/testing/gtest/include/gtest
 
 mkdir -p $CHROMIUM_LOCAL_DIR/third_party/googletest/src/googletest/include/gtest
+mkdir -p $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/protozero
+mkdir -p $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/tracing
+mkdir -p $CHROMIUM_LOCAL_DIR/third_party/perfetto/protos/perfetto/trace/track_event
 scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/googletest/src/googletest/include/gtest/gtest_prod.h" $CHROMIUM_LOCAL_DIR/third_party/googletest/src/googletest/include/gtest
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/protozero/message_handle.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/protozero
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/tracing/event_context.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/tracing
+scp "$HOST:$CHROMIUM_REMOTE_DIR/third_party/perfetto/include/perfetto/tracing/track.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/tracing
+scp "$HOST:$CHROMIUM_REMOTE_DIR/out/Debug/gen/third_party/perfetto/protos/perfetto/trace/track_event/track_event.pbzero.h" $CHROMIUM_LOCAL_DIR/third_party/perfetto/protos/perfetto/trace/track_event
