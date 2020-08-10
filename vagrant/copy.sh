@@ -10,6 +10,7 @@ CHROMIUM_REMOTE_DIR=/home/vagrant/chromium/src
 CHROMIUM_LOCAL_DIR=lib/chromium
 
 scp "$HOST:$CHROMIUM_REMOTE_DIR/LICENSE" lib/chromium
+scp "$HOST:$CHROMIUM_REMOTE_DIR/LICENSE.chromium_os" lib/chromium
 
 readonly FILES=(
   base/atomic_ref_count.h
