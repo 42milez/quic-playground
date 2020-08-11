@@ -219,4 +219,4 @@ add_library(chromium STATIC
     third_party/perfetto/src/tracing/internal/track_event_internal.cc
     third_party/perfetto/src/tracing/trace_writer_base.cc
     third_party/perfetto/src/tracing/track.cc)
-target_include_directories(chromium PRIVATE "${PROJECT_SOURCE_DIR}/lib/chromium")
+target_include_directories(chromium PUBLIC "${PROJECT_SOURCE_DIR}/lib/chromium")
