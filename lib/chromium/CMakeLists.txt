@@ -1,5 +1,4 @@
-add_library(chromium STATIC)
-target_sources(chromium PRIVATE
+add_library(chromium STATIC
     base/atomic_ref_count.h
     base/atomicops.h
     base/atomicops_internals_portable.h
@@ -219,6 +218,5 @@ target_sources(chromium PRIVATE
     third_party/perfetto/src/tracing/event_context.cc
     third_party/perfetto/src/tracing/internal/track_event_internal.cc
     third_party/perfetto/src/tracing/trace_writer_base.cc
-    third_party/perfetto/src/tracing/track.cc
-)
+    third_party/perfetto/src/tracing/track.cc)
 target_include_directories(chromium PRIVATE "${PROJECT_SOURCE_DIR}/lib/chromium")
