@@ -141,126 +141,128 @@ for file in "${BASE_FILES[@]}"; do
 
   header="$CHROMIUM_REMOTE_DIR/$file.h"
   if ssh $HOST test -e "$header"; then
-    scp "$HOST:$header" "$dir"
+    echo 'a'
+    scp "$HOST:$header" "$CHROMIUM_LOCAL_DIR/$dir"
   fi
 
   source="$CHROMIUM_REMOTE_DIR/$file.cc"
   if ssh $HOST test -e "$source"; then
-    scp "$HOST:$source" "$dir"
+    echo 'b'
+    scp "$HOST:$source" "$CHROMIUM_LOCAL_DIR/$dir"
   fi
 done
 
 # --------------------------------------------------
 
-#readonly GEN_FILE_DIR=out/Debug/gen
-#readonly GEN_FILES=(
-#  base/debug/debugging_buildflags
-#  base/logging_buildflags
-#  base/tracing_buildflags
-#  third_party/perfetto/protos/perfetto/common/builtin_clock.pbzero
-#  third_party/perfetto/protos/perfetto/trace/interned_data/interned_data.pbzero
-#  third_party/perfetto/protos/perfetto/trace/trace_packet.pbzero
-#  third_party/perfetto/protos/perfetto/trace/track_event/debug_annotation.pbzero
-#  third_party/perfetto/protos/perfetto/trace/track_event/track_descriptor.gen
-#  third_party/perfetto/protos/perfetto/trace/track_event/track_descriptor.pbzero
-#  third_party/perfetto/protos/perfetto/trace/track_event/track_event.pbzero
-#)
-#
-#for file in "${GEN_FILES[@]}"; do
-#  dir=$(dirname "$file")
-#  mkdir -p "$CHROMIUM_LOCAL_DIR/$dir"
-#
-#  header="$CHROMIUM_REMOTE_DIR/$GEN_FILE_DIR/$file.h"
-#  if ssh $HOST test -e "$header"; then
-#    scp "$HOST:$header" "$dir"
-#  fi
-#
-#  source="$CHROMIUM_REMOTE_DIR/$GEN_FILE_DIR/$file.cc"
-#  if ssh $HOST test -e "$source"; then
-#    scp "$HOST:$source" "$dir"
-#  fi
-#done
+readonly GEN_FILE_DIR=out/Debug/gen
+readonly GEN_FILES=(
+  base/debug/debugging_buildflags
+  base/logging_buildflags
+  base/tracing_buildflags
+  third_party/perfetto/protos/perfetto/common/builtin_clock.pbzero
+  third_party/perfetto/protos/perfetto/trace/interned_data/interned_data.pbzero
+  third_party/perfetto/protos/perfetto/trace/trace_packet.pbzero
+  third_party/perfetto/protos/perfetto/trace/track_event/debug_annotation.pbzero
+  third_party/perfetto/protos/perfetto/trace/track_event/track_descriptor.gen
+  third_party/perfetto/protos/perfetto/trace/track_event/track_descriptor.pbzero
+  third_party/perfetto/protos/perfetto/trace/track_event/track_event.pbzero
+)
+
+for file in "${GEN_FILES[@]}"; do
+  dir=$(dirname "$file")
+  mkdir -p "$CHROMIUM_LOCAL_DIR/$dir"
+
+  header="$CHROMIUM_REMOTE_DIR/$GEN_FILE_DIR/$file.h"
+  if ssh $HOST test -e "$header"; then
+    scp "$HOST:$header" "$CHROMIUM_LOCAL_DIR/$dir"
+  fi
+
+  source="$CHROMIUM_REMOTE_DIR/$GEN_FILE_DIR/$file.cc"
+  if ssh $HOST test -e "$source"; then
+    scp "$HOST:$source" "$CHROMIUM_LOCAL_DIR/$dir"
+  fi
+done
 
 # --------------------------------------------------
 
-#readonly GTEST_HEADER_DIR=third_party/googletest/src/googletest/include/gtest
-#readonly GTEST_SOURCE_DIR=third_party/googletest/src/googletest/src
-#readonly GTEST_FILES=(
-#  gtest_prod
-#)
-#
-#mkdir -p "$CHROMIUM_LOCAL_DIR/$GTEST_HEADER_DIR"
-#mkdir -p "$CHROMIUM_LOCAL_DIR/$GTEST_SOURCE_DIR"
-#
-#for file in "${GTEST_FILES[@]}"; do
-#  header="$CHROMIUM_REMOTE_DIR/$GTEST_HEADER_DIR/$file.h"
-#  if ssh $HOST test -e "$header"; then
-#    scp "$HOST:$header" "$dir"
-#  fi
-#
-#  source="$CHROMIUM_REMOTE_DIR/$GTEST_SOURCE_DIR/$file.cc"
-#  if ssh $HOST test -e "$source"; then
-#    scp "$HOST:$source" "$dir"
-#  fi
-#done
+readonly GTEST_HEADER_DIR=third_party/googletest/src/googletest/include/gtest
+readonly GTEST_SOURCE_DIR=third_party/googletest/src/googletest/src
+readonly GTEST_FILES=(
+  gtest_prod
+)
+
+mkdir -p "$CHROMIUM_LOCAL_DIR/$GTEST_HEADER_DIR"
+mkdir -p "$CHROMIUM_LOCAL_DIR/$GTEST_SOURCE_DIR"
+
+for file in "${GTEST_FILES[@]}"; do
+  header="$CHROMIUM_REMOTE_DIR/$GTEST_HEADER_DIR/$file.h"
+  if ssh $HOST test -e "$header"; then
+    scp "$HOST:$header" "$CHROMIUM_LOCAL_DIR/$GTEST_HEADER_DIR/$dir"
+  fi
+
+  source="$CHROMIUM_REMOTE_DIR/$GTEST_SOURCE_DIR/$file.cc"
+  if ssh $HOST test -e "$source"; then
+    scp "$HOST:$source" "$CHROMIUM_LOCAL_DIR/$GTEST_SOURCE_DIR/$dir"
+  fi
+done
 
 # --------------------------------------------------
 
-#readonly PERFETTO_HEADER_DIR=third_party/perfetto/include
-#readonly PERFETTO_SOURCE_DIR=third_party/perfetto/src
-#readonly PERFETTO_FILES=(
-#  perfetto/base/build_config
-#  perfetto/base/compiler
-#  perfetto/base/export
-#  perfetto/base/flat_set
-#  perfetto/base/logging
-#  perfetto/base/proc_utils
-#  perfetto/base/thread_utils
-#  perfetto/protozero/contiguous_memory_range
-#  perfetto/protozero/copyable_ptr
-#  perfetto/protozero/cpp_message_obj
-#  perfetto/protozero/field
-#  perfetto/protozero/message
-#  perfetto/protozero/message_handle
-#  perfetto/protozero/packed_repeated_fields
-#  perfetto/protozero/proto_decoder
-#  perfetto/protozero/proto_utils
-#  perfetto/protozero/scattered_heap_buffer
-#  perfetto/protozero/scattered_stream_writer
-#  perfetto/tracing/core/forward_decls
-#  perfetto/tracing/debug_annotation
-#  perfetto/tracing/event_context
-#  perfetto/tracing/internal/track_event_internal
-#  perfetto/tracing/trace_writer_base
-#  perfetto/tracing/track
-#)
-#
-#mkdir -p "$CHROMIUM_LOCAL_DIR/$PERFETTO_HEADER_DIR"
-#mkdir -p "$CHROMIUM_LOCAL_DIR/$PERFETTO_SOURCE_DIR"
-#
-#for file in "${PERFETTO_FILES[@]}"; do
-#  header="$CHROMIUM_REMOTE_DIR/$file.h"
-#  if ssh $HOST test -e "$header"; then
-#    scp "$HOST:$header" "$dir"
-#  fi
-#
-#  source="$CHROMIUM_REMOTE_DIR/$file.cc"
-#  if ssh $HOST test -e "$source"; then
-#    scp "$HOST:$source" "$dir"
-#  fi
-#done
-#
-#scp $HOST:$CHROMIUM_REMOTE_DIR/out/Debug/gen/third_party/perfetto/build_config/perfetto_build_flags.h \
-#    $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/base
+readonly PERFETTO_HEADER_DIR=third_party/perfetto/include
+readonly PERFETTO_SOURCE_DIR=third_party/perfetto/src
+readonly PERFETTO_FILES=(
+  perfetto/base/build_config
+  perfetto/base/compiler
+  perfetto/base/export
+  perfetto/base/flat_set
+  perfetto/base/logging
+  perfetto/base/proc_utils
+  perfetto/base/thread_utils
+  perfetto/protozero/contiguous_memory_range
+  perfetto/protozero/copyable_ptr
+  perfetto/protozero/cpp_message_obj
+  perfetto/protozero/field
+  perfetto/protozero/message
+  perfetto/protozero/message_handle
+  perfetto/protozero/packed_repeated_fields
+  perfetto/protozero/proto_decoder
+  perfetto/protozero/proto_utils
+  perfetto/protozero/scattered_heap_buffer
+  perfetto/protozero/scattered_stream_writer
+  perfetto/tracing/core/forward_decls
+  perfetto/tracing/debug_annotation
+  perfetto/tracing/event_context
+  perfetto/tracing/internal/track_event_internal
+  perfetto/tracing/trace_writer_base
+  perfetto/tracing/track
+)
+
+mkdir -p "$CHROMIUM_LOCAL_DIR/$PERFETTO_HEADER_DIR"
+mkdir -p "$CHROMIUM_LOCAL_DIR/$PERFETTO_SOURCE_DIR"
+
+for file in "${PERFETTO_FILES[@]}"; do
+  header="$CHROMIUM_REMOTE_DIR/$file.h"
+  if ssh $HOST test -e "$header"; then
+    scp "$HOST:$header" "$CHROMIUM_LOCAL_DIR/$PERFETTO_HEADER_DIR/$dir"
+  fi
+
+  source="$CHROMIUM_REMOTE_DIR/$file.cc"
+  if ssh $HOST test -e "$source"; then
+    scp "$HOST:$source" "$CHROMIUM_LOCAL_DIR/$PERFETTO_SOURCE_DIR/$dir"
+  fi
+done
+
+scp $HOST:$CHROMIUM_REMOTE_DIR/out/Debug/gen/third_party/perfetto/build_config/perfetto_build_flags.h \
+    $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/base
 
 # --------------------------------------------------
 
-#PERFETTO_SYMLINK=$CHROMIUM_LOCAL_DIR/perfetto
-#if [ ! -e "$PERFETTO_SYMLINK" ]; then
-#  ln -s "$(pwd)/$CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto" $PERFETTO_SYMLINK
-#fi
-#
-#PERFETTO_PROTO_SYMLINK=$CHROMIUM_LOCAL_DIR/protos
-#if [ ! -e "$PERFETTO_PROTO_SYMLINK" ]; then
-#  ln -s "$(pwd)/$CHROMIUM_LOCAL_DIR/third_party/perfetto/protos" $PERFETTO_PROTO_SYMLINK
-#fi
+PERFETTO_SYMLINK=$CHROMIUM_LOCAL_DIR/perfetto
+if [ ! -e "$PERFETTO_SYMLINK" ]; then
+  ln -s "$(pwd)/$CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto" $PERFETTO_SYMLINK
+fi
+
+PERFETTO_PROTO_SYMLINK=$CHROMIUM_LOCAL_DIR/protos
+if [ ! -e "$PERFETTO_PROTO_SYMLINK" ]; then
+  ln -s "$(pwd)/$CHROMIUM_LOCAL_DIR/third_party/perfetto/protos" $PERFETTO_PROTO_SYMLINK
+fi
