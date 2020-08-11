@@ -1,7 +1,6 @@
 #ifndef EPOLL_SERVER_SIMPLE_EPOLL_SERVER_H_
 #define EPOLL_SERVER_SIMPLE_EPOLL_SERVER_H_
 
-#include "epoll_export.h"
 #include "epoll_logging.h"
 #include <map>
 #include <memory>
