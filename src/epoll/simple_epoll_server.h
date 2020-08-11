@@ -1,6 +1,8 @@
 #ifndef EPOLL_SERVER_SIMPLE_EPOLL_SERVER_H_
 #define EPOLL_SERVER_SIMPLE_EPOLL_SERVER_H_
 
+#include "epoll_export.h"
+#include "epoll_logging.h"
 #include <map>
 #include <memory>
 #include <sys/epoll.h>
@@ -213,10 +215,10 @@ private:
 
 class EpollAlarmCallbackInterface {
 public:
-    virtual int64_t OnAlarm() = 0;
+    virtual int64_t OnAlarm()                                                                          = 0;
     virtual void OnRegistration(const SimpleEpollServer::AlarmRegToken &token, SimpleEpollServer *eps) = 0;
-    virtual void OnUnregistration() = 0;
-    virtual void OnShutdown(SimpleEpollServer *eps) = 0;
+    virtual void OnUnregistration()                                                                    = 0;
+    virtual void OnShutdown(SimpleEpollServer *eps)                                                    = 0;
 
     virtual ~EpollAlarmCallbackInterface() {}
 
