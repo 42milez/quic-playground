@@ -12,238 +12,248 @@ CHROMIUM_LOCAL_DIR=lib/chromium
 scp "$HOST:$CHROMIUM_REMOTE_DIR/LICENSE" lib/chromium
 scp "$HOST:$CHROMIUM_REMOTE_DIR/LICENSE.chromium_os" lib/chromium
 
-readonly FILES=(
-  base/atomic_ref_count.h
-  base/atomicops.h
-  base/atomicops_internals_portable.h
-  base/base_export.h
-  base/bind.h
-  base/bind_internal.h
-  base/callback.h
-  base/callback_forward.h
-  base/callback_internal.cc
-  base/callback_internal.h
-  base/check.cc
-  base/check.h
-  base/check_op.cc
-  base/check_op.h
-  base/compiler_specific.h
-  base/containers/checked_iterators.h
-  base/containers/checked_range.h
-  base/containers/circular_deque.h
-  base/containers/flat_map.h
-  base/containers/flat_tree.h
-  base/containers/linked_list.h
-  base/containers/queue.h
-  base/containers/span.h
-  base/containers/stack.h
-  base/containers/util.h
-  base/containers/vector_buffer.h
-  base/dcheck_is_on.h
-  base/files/file_path.cc
-  base/files/file_path.h
-  base/gtest_prod_util.h
-  base/hash/hash.cc
-  base/hash/hash.h
-  base/immediate_crash.h
-  base/location.cc
-  base/location.h
-  base/logging.cc
-  base/logging.h
-  base/macros.h
-  base/memory/raw_scoped_refptr_mismatch_checker.h
-  base/memory/ref_counted.cc
-  base/memory/ref_counted.h
-  base/memory/scoped_refptr.h
-  base/memory/weak_ptr.cc
-  base/memory/weak_ptr.h
-  base/no_destructor.h
-  base/notreached.cc
-  base/notreached.h
-  base/numerics/checked_math.h
-  base/numerics/checked_math_impl.h
-  base/numerics/clamped_math.h
-  base/numerics/clamped_math_impl.h
-  base/numerics/safe_conversions.h
-  base/numerics/safe_conversions_impl.h
-  base/numerics/safe_math.h
-  base/numerics/safe_math_clang_gcc_impl.h
-  base/numerics/safe_math_shared_impl.h
-  base/observer_list.h
-  base/observer_list_internal.cc
-  base/observer_list_internal.h
-  base/observer_list_types.cc
-  base/observer_list_types.h
-  base/optional.h
-  base/pending_task.cc
-  base/pending_task.h
-  base/pickle.cc
-  base/pickle.h
-  base/post_task_and_reply_with_result_internal.h
-  base/process/process_handle.cc
-  base/process/process_handle.h
-  base/scoped_clear_last_error.h
-  base/sequence_checker.h
-  base/sequence_checker_impl.cc
-  base/sequence_checker_impl.h
-  base/sequence_token.cc
-  base/sequence_token.h
-  base/sequenced_task_runner.cc
-  base/sequenced_task_runner.h
-  base/sequenced_task_runner_helpers.h
-  base/single_thread_task_runner.h
-  base/stl_util.h
-  base/strings/char_traits.h
-  base/strings/string16.cc
-  base/strings/string16.h
-  base/strings/string_piece.cc
-  base/strings/string_piece.h
-  base/strings/string_piece_forward.h
-  base/strings/string_util.h
-  base/strings/stringprintf.cc
-  base/strings/stringprintf.h
-  base/strings/utf_string_conversions.cc
-  base/strings/utf_string_conversions.h
-  base/synchronization/atomic_flag.cc
-  base/synchronization/atomic_flag.h
-  base/synchronization/condition_variable.h
-  base/synchronization/lock.cc
-  base/synchronization/lock.h
-  base/synchronization/lock_impl.h
-  base/task/common/task_annotator.cc
-  base/task/common/task_annotator.h
-  base/task_runner.cc
-  base/task_runner.h
-  base/template_util.h
-  base/third_party/nspr/prtime.cc
-  base/third_party/nspr/prtime.h
-  base/thread_annotations.h
-  base/threading/platform_thread.cc
-  base/threading/platform_thread.h
-  base/threading/thread_checker.h
-  base/threading/thread_checker_impl.cc
-  base/threading/thread_checker_impl.h
-  base/threading/thread_collision_warner.cc
-  base/threading/thread_collision_warner.h
-  base/threading/thread_local.h
-  base/threading/thread_local_internal.h
-  base/threading/thread_local_storage.cc
-  base/threading/thread_local_storage.h
-  base/time/time.cc
-  base/time/time.h
-  base/time/time_override.cc
-  base/time/time_override.h
-  base/trace_event/base_tracing.h
-  base/trace_event/blame_context.cc
-  base/trace_event/blame_context.h
-  base/trace_event/builtin_categories.cc
-  base/trace_event/builtin_categories.h
-  base/trace_event/category_registry.cc
-  base/trace_event/category_registry.h
-  base/trace_event/common/trace_event_common.h
-  base/trace_event/heap_profiler.h
-  base/trace_event/heap_profiler_allocation_context.cc
-  base/trace_event/heap_profiler_allocation_context.h
-  base/trace_event/heap_profiler_allocation_context_tracker.cc
-  base/trace_event/heap_profiler_allocation_context_tracker.h
-  base/trace_event/log_message.cc
-  base/trace_event/log_message.h
-  base/trace_event/memory_allocator_dump_guid.cc
-  base/trace_event/memory_allocator_dump_guid.h
-  base/trace_event/memory_dump_provider.h
-  base/trace_event/memory_dump_request_args.cc
-  base/trace_event/memory_dump_request_args.h
-  base/trace_event/thread_instruction_count.cc
-  base/trace_event/thread_instruction_count.h
-  base/trace_event/trace_arguments.cc
-  base/trace_event/trace_arguments.h
-  base/trace_event/trace_category.h
-  base/trace_event/trace_config.cc
-  base/trace_event/trace_config.h
-  base/trace_event/trace_config_category_filter.cc
-  base/trace_event/trace_config_category_filter.h
-  base/trace_event/trace_event.h
-  base/trace_event/trace_event_impl.cc
-  base/trace_event/trace_event_impl.h
-  base/trace_event/trace_event_memory_overhead.cc
-  base/trace_event/trace_event_memory_overhead.h
-  base/trace_event/trace_event_stub.cc
-  base/trace_event/trace_event_stub.h
-  base/trace_event/trace_log.cc
-  base/trace_event/trace_log.h
-  base/trace_event/traced_value.cc
-  base/trace_event/traced_value.h
-  base/trace_event/typed_macros.h
-  base/trace_event/typed_macros_embedder_support.h
-  base/trace_event/typed_macros_internal.cc
-  base/trace_event/typed_macros_internal.h
-  base/value_iterators.cc
-  base/value_iterators.h
-  base/values.cc
-  base/values.h
-  build/build_config.h
-  build/buildflag.h
-  out/Debug/gen/base/debug/debugging_buildflags.h
-  out/Debug/gen/base/logging_buildflags.h
-  out/Debug/gen/base/tracing_buildflags.h
-  out/Debug/gen/third_party/perfetto/protos/perfetto/common/builtin_clock.pbzero.h
-  out/Debug/gen/third_party/perfetto/protos/perfetto/trace/interned_data/interned_data.pbzero.h
-  out/Debug/gen/third_party/perfetto/protos/perfetto/trace/trace_packet.pbzero.h
-  out/Debug/gen/third_party/perfetto/protos/perfetto/trace/track_event/debug_annotation.pbzero.h
-  out/Debug/gen/third_party/perfetto/protos/perfetto/trace/track_event/track_descriptor.gen.h
-  out/Debug/gen/third_party/perfetto/protos/perfetto/trace/track_event/track_descriptor.pbzero.h
-  out/Debug/gen/third_party/perfetto/protos/perfetto/trace/track_event/track_event.pbzero.h
-  testing/gtest/include/gtest/gtest_prod.h
-  third_party/googletest/src/googletest/include/gtest/gtest_prod.h
-  third_party/perfetto/include/perfetto/base/build_config.h
-  third_party/perfetto/include/perfetto/base/compiler.h
-  third_party/perfetto/include/perfetto/base/export.h
-  third_party/perfetto/include/perfetto/base/flat_set.h
-  third_party/perfetto/include/perfetto/base/logging.h
-  third_party/perfetto/include/perfetto/base/proc_utils.h
-  third_party/perfetto/include/perfetto/base/thread_utils.h
-  third_party/perfetto/include/perfetto/protozero/contiguous_memory_range.h
-  third_party/perfetto/include/perfetto/protozero/copyable_ptr.h
-  third_party/perfetto/include/perfetto/protozero/cpp_message_obj.h
-  third_party/perfetto/include/perfetto/protozero/field.h
-  third_party/perfetto/include/perfetto/protozero/message.h
-  third_party/perfetto/include/perfetto/protozero/message_handle.h
-  third_party/perfetto/include/perfetto/protozero/packed_repeated_fields.h
-  third_party/perfetto/include/perfetto/protozero/proto_decoder.h
-  third_party/perfetto/include/perfetto/protozero/proto_utils.h
-  third_party/perfetto/include/perfetto/protozero/scattered_heap_buffer.h
-  third_party/perfetto/include/perfetto/protozero/scattered_stream_writer.h
-  third_party/perfetto/include/perfetto/tracing/core/forward_decls.h
-  third_party/perfetto/include/perfetto/tracing/debug_annotation.h
-  third_party/perfetto/include/perfetto/tracing/event_context.h
-  third_party/perfetto/include/perfetto/tracing/internal/track_event_internal.h
-  third_party/perfetto/include/perfetto/tracing/trace_writer_base.h
-  third_party/perfetto/include/perfetto/tracing/track.h
-  third_party/perfetto/src/base/logging.cc
-  third_party/perfetto/src/base/thread_checker.cc
-  third_party/perfetto/src/base/time.cc
-  third_party/perfetto/src/protozero/message.cc
-  third_party/perfetto/src/protozero/message_handle.cc
-  third_party/perfetto/src/protozero/packed_repeated_fields.cc
-  third_party/perfetto/src/protozero/proto_decoder.cc
-  third_party/perfetto/src/protozero/scattered_heap_buffer.cc
-  third_party/perfetto/src/protozero/scattered_stream_writer.cc
-  third_party/perfetto/src/tracing/debug_annotation.cc
-  third_party/perfetto/src/tracing/event_context.cc
-  third_party/perfetto/src/tracing/internal/track_event_internal.cc
-  third_party/perfetto/src/tracing/trace_writer_base.cc
-  third_party/perfetto/src/tracing/track.cc
+# --------------------------------------------------
+
+readonly BASE_FILES=(
+  base/atomic_ref_count
+  base/atomicops
+  base/atomicops_internals_portable
+  base/base_export
+  base/bind
+  base/bind_internal
+  base/callback
+  base/callback_forward
+  base/callback_internal
+  base/check
+  base/check_op
+  base/compiler_specific
+  base/containers/checked_iterators
+  base/containers/checked_range
+  base/containers/circular_deque
+  base/containers/flat_map
+  base/containers/flat_tree
+  base/containers/linked_list
+  base/containers/queue
+  base/containers/span
+  base/containers/stack
+  base/containers/util
+  base/containers/vector_buffer
+  base/dcheck_is_on
+  base/files/file_path
+  base/gtest_prod_util
+  base/hash/hash
+  base/immediate_crash
+  base/location
+  base/logging
+  base/macros
+  base/memory/raw_scoped_refptr_mismatch_checker
+  base/memory/ref_counted
+  base/memory/scoped_refptr
+  base/memory/weak_ptr
+  base/no_destructor
+  base/notreached
+  base/numerics/checked_math
+  base/numerics/checked_math_impl
+  base/numerics/clamped_math
+  base/numerics/clamped_math_impl
+  base/numerics/safe_conversions
+  base/numerics/safe_conversions_impl
+  base/numerics/safe_math
+  base/numerics/safe_math_clang_gcc_impl
+  base/numerics/safe_math_shared_impl
+  base/observer_list
+  base/observer_list_internal
+  base/observer_list_types
+  base/optional
+  base/pending_task
+  base/pickle
+  base/post_task_and_reply_with_result_internal
+  base/process/process_handle
+  base/scoped_clear_last_error
+  base/sequence_checker
+  base/sequence_checker_impl
+  base/sequence_token
+  base/sequenced_task_runner
+  base/sequenced_task_runner_helpers
+  base/single_thread_task_runner
+  base/stl_util
+  base/strings/char_traits
+  base/strings/string16
+  base/strings/string_piece
+  base/strings/string_piece_forward
+  base/strings/string_util
+  base/strings/stringprintf
+  base/strings/utf_string_conversions
+  base/synchronization/atomic_flag
+  base/synchronization/condition_variable
+  base/synchronization/lock
+  base/synchronization/lock_impl
+  base/task/common/task_annotator
+  base/task_runner
+  base/template_util
+  base/third_party/nspr/prtime
+  base/thread_annotations
+  base/threading/platform_thread
+  base/threading/thread_checker
+  base/threading/thread_checker_impl
+  base/threading/thread_collision_warner
+  base/threading/thread_local
+  base/threading/thread_local_internal
+  base/threading/thread_local_storage
+  base/time/time
+  base/time/time_override
+  base/trace_event/base_tracing
+  base/trace_event/blame_context
+  base/trace_event/builtin_categories
+  base/trace_event/category_registry
+  base/trace_event/common/trace_event_common
+  base/trace_event/heap_profiler
+  base/trace_event/heap_profiler_allocation_context
+  base/trace_event/heap_profiler_allocation_context_tracker
+  base/trace_event/log_message
+  base/trace_event/memory_allocator_dump_guid
+  base/trace_event/memory_dump_provider
+  base/trace_event/memory_dump_request_args
+  base/trace_event/thread_instruction_count
+  base/trace_event/trace_arguments
+  base/trace_event/trace_category
+  base/trace_event/trace_config
+  base/trace_event/trace_config_category_filter
+  base/trace_event/trace_event
+  base/trace_event/trace_event_impl
+  base/trace_event/trace_event_memory_overhead
+  base/trace_event/trace_event_stub
+  base/trace_event/trace_log
+  base/trace_event/traced_value
+  base/trace_event/typed_macros
+  base/trace_event/typed_macros_embedder_support
+  base/trace_event/typed_macros_internal
+  base/value_iterators
+  base/values
+  build/build_config
+  build/buildflag
+  testing/gtest/include/gtest/gtest_prod
 )
 
-for file in "${FILES[@]}"; do
+for file in "${BASE_FILES[@]}"; do
   dir=$(dirname "$file")
-  dir="$CHROMIUM_LOCAL_DIR/$(echo "${dir#*out/Debug/gen/}")"
-  mkdir -p "$dir"
-  scp "$HOST:$CHROMIUM_REMOTE_DIR/$file" "$dir"
+  mkdir -p "$CHROMIUM_LOCAL_DIR/$dir"
+
+  header="$CHROMIUM_REMOTE_DIR/$file.h"
+  if ssh $HOST test -e "$header"; then
+    scp "$HOST:$header" "$dir"
+  fi
+
+  source="$CHROMIUM_REMOTE_DIR/$file.cc"
+  if ssh $HOST test -e "$source"; then
+    scp "$HOST:$source" "$dir"
+  fi
+done
+
+# --------------------------------------------------
+
+readonly GEN_FILE_DIR=out/Debug/gen
+readonly GEN_FILES=(
+  base/debug/debugging_buildflags
+  base/logging_buildflags
+  base/tracing_buildflags
+  third_party/perfetto/protos/perfetto/common/builtin_clock.pbzero
+  third_party/perfetto/protos/perfetto/trace/interned_data/interned_data.pbzero
+  third_party/perfetto/protos/perfetto/trace/trace_packet.pbzero
+  third_party/perfetto/protos/perfetto/trace/track_event/debug_annotation.pbzero
+  third_party/perfetto/protos/perfetto/trace/track_event/track_descriptor.gen
+  third_party/perfetto/protos/perfetto/trace/track_event/track_descriptor.pbzero
+  third_party/perfetto/protos/perfetto/trace/track_event/track_event.pbzero
+)
+
+for file in "${GEN_FILES[@]}"; do
+  dir=$(dirname "$file")
+  mkdir -p "$CHROMIUM_LOCAL_DIR/$dir"
+
+  header="$CHROMIUM_REMOTE_DIR/$GEN_FILE_DIR/$file.h"
+  if ssh $HOST test -e "$header"; then
+    scp "$HOST:$header" "$dir"
+  fi
+
+  source="$CHROMIUM_REMOTE_DIR/$GEN_FILE_DIR/$file.cc"
+  if ssh $HOST test -e "$source"; then
+    scp "$HOST:$source" "$dir"
+  fi
+done
+
+# --------------------------------------------------
+
+readonly GTEST_HEADER_DIR=third_party/googletest/src/googletest/include/gtest
+readonly GTEST_SOURCE_DIR=third_party/googletest/src/googletest/src
+readonly GTEST_FILES=(
+  gtest_prod
+)
+
+mkdir -p "$CHROMIUM_LOCAL_DIR/$GTEST_HEADER_DIR"
+mkdir -p "$CHROMIUM_LOCAL_DIR/$GTEST_SOURCE_DIR"
+
+for file in "${GTEST_FILES[@]}"; do
+  header="$CHROMIUM_REMOTE_DIR/$GTEST_HEADER_DIR/$file.h"
+  if ssh $HOST test -e "$header"; then
+    scp "$HOST:$header" "$dir"
+  fi
+
+  source="$CHROMIUM_REMOTE_DIR/$GTEST_SOURCE_DIR/$file.cc"
+  if ssh $HOST test -e "$source"; then
+    scp "$HOST:$source" "$dir"
+  fi
+done
+
+# --------------------------------------------------
+
+readonly PERFETTO_HEADER_DIR=third_party/perfetto/include
+readonly PERFETTO_SOURCE_DIR=third_party/perfetto/src
+readonly PERFETTO_FILES=(
+  perfetto/base/build_config
+  perfetto/base/compiler
+  perfetto/base/export
+  perfetto/base/flat_set
+  perfetto/base/logging
+  perfetto/base/proc_utils
+  perfetto/base/thread_utils
+  perfetto/protozero/contiguous_memory_range
+  perfetto/protozero/copyable_ptr
+  perfetto/protozero/cpp_message_obj
+  perfetto/protozero/field
+  perfetto/protozero/message
+  perfetto/protozero/message_handle
+  perfetto/protozero/packed_repeated_fields
+  perfetto/protozero/proto_decoder
+  perfetto/protozero/proto_utils
+  perfetto/protozero/scattered_heap_buffer
+  perfetto/protozero/scattered_stream_writer
+  perfetto/tracing/core/forward_decls
+  perfetto/tracing/debug_annotation
+  perfetto/tracing/event_context
+  perfetto/tracing/internal/track_event_internal
+  perfetto/tracing/trace_writer_base
+  perfetto/tracing/track
+)
+
+mkdir -p "$CHROMIUM_LOCAL_DIR/$PERFETTO_HEADER_DIR"
+mkdir -p "$CHROMIUM_LOCAL_DIR/$PERFETTO_SOURCE_DIR"
+
+for file in "${PERFETTO_FILES[@]}"; do
+  header="$CHROMIUM_REMOTE_DIR/$file.h"
+  if ssh $HOST test -e "$header"; then
+    scp "$HOST:$header" "$dir"
+  fi
+
+  source="$CHROMIUM_REMOTE_DIR/$file.cc"
+  if ssh $HOST test -e "$source"; then
+    scp "$HOST:$source" "$dir"
+  fi
 done
 
 scp $HOST:$CHROMIUM_REMOTE_DIR/out/Debug/gen/third_party/perfetto/build_config/perfetto_build_flags.h \
     $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/base
+
+# --------------------------------------------------
 
 PERFETTO_SYMLINK=$CHROMIUM_LOCAL_DIR/perfetto
 if [ ! -e "$PERFETTO_SYMLINK" ]; then
