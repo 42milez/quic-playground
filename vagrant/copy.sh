@@ -19,6 +19,7 @@ readonly BASE_FILES=(
   base/atomicops
   base/atomicops_internals_portable
   base/base_export
+  base/base_switches
   base/bind
   base/bind_internal
   base/callback
@@ -69,6 +70,7 @@ readonly BASE_FILES=(
   base/pickle
   base/post_task_and_reply_with_result_internal
   base/process/process_handle
+  base/rand_util
   base/scoped_clear_last_error
   base/sequence_checker
   base/sequence_checker_impl
@@ -78,11 +80,15 @@ readonly BASE_FILES=(
   base/single_thread_task_runner
   base/stl_util
   base/strings/char_traits
+  base/strings/strcat
   base/strings/string16
+  base/strings/string_number_conversions
   base/strings/string_piece
   base/strings/string_piece_forward
   base/strings/string_util
+  base/strings/string_util_posix
   base/strings/stringprintf
+  base/strings/sys_string_conversions
   base/strings/utf_string_conversions
   base/synchronization/atomic_flag
   base/synchronization/condition_variable
@@ -91,6 +97,7 @@ readonly BASE_FILES=(
   base/task/common/task_annotator
   base/task_runner
   base/template_util
+  base/third_party/cityhash/city
   base/third_party/nspr/prtime
   base/thread_annotations
   base/threading/platform_thread
