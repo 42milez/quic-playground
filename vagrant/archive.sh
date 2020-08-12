@@ -585,9 +585,40 @@ cp -p "$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/config_linux.h" "$TMP_DIR/$TCMALLO
 sed -i 's/<config\.h>/"config\.h"/' "$TMP_DIR/$TCMALLOC_SOURCE_DIR/heap-profiler.cc"
 sed -i 's/<config\.h>/"config\.h"/' "$TMP_DIR/$TCMALLOC_SOURCE_DIR/malloc_extension.cc"
 sed -i 's/<config\.h>/"config\.h"/' "$TMP_DIR/$TCMALLOC_SOURCE_DIR/malloc_hook.cc"
-
 sed -i 's/<gperftools\/heap-profiler\.h>/"gperftools\/heap-profiler\.h"/' \
        "$TMP_DIR/$TCMALLOC_SOURCE_DIR/heap-profiler.cc"
+
+readonly TCMALLOC_BASE_DIR=third_party/tcmalloc/chromium/src/base
+readonly TCMALLOC_BASE_FILES=(
+  basictypes
+  dynamic_annotations
+  sysinfo
+)
+
+mkdir -p "$TMP_DIR/$TCMALLOC_BASE_DIR"
+
+for file in "${TCMALLOC_BASE_FILES[@]}"; do
+  header="$CHROMIUM_DIR/src/$TCMALLOC_BASE_DIR/$file.h"
+  if [ -e "$header" ]; then
+    cp -p "$header" "$TMP_DIR/$TCMALLOC_BASE_DIR"
+  fi
+
+  source="$CHROMIUM_DIR/src/$TCMALLOC_BASE_DIR/$file.cc"
+  if [ -e "$source" ]; then
+    cp -p "$source" "$TMP_DIR/$TCMALLOC_BASE_DIR"
+  fi
+
+  source="$CHROMIUM_DIR/src/$TCMALLOC_BASE_DIR/$file.c"
+  if [ -e "$source" ]; then
+    cp -p "$source" "$TMP_DIR/$TCMALLOC_BASE_DIR"
+  fi
+done
+
+sed -i 's/<config\.h>/"third_party\/tcmalloc\/chromium\/src\/config\.h"/' "$TMP_DIR/$TCMALLOC_BASE_DIR/basictypes.h"
+sed -i 's/<config\.h>/"third_party\/tcmalloc\/chromium\/src\/config\.h"/' "$TMP_DIR/$TCMALLOC_BASE_DIR/sysinfo.cc"
+sed -i 's/<config\.h>/"third_party\/tcmalloc\/chromium\/src\/config\.h"/' "$TMP_DIR/$TCMALLOC_BASE_DIR/sysinfo.h"
+sed -i 's/base\/basictypes\.h/basictypes\.h/' "$TMP_DIR/$TCMALLOC_BASE_DIR/sysinfo.h"
+sed -i 's/base\/sysinfo\.h/sysinfo\.h/' "$TMP_DIR/$TCMALLOC_BASE_DIR/sysinfo.cc"
 
 # --------------------------------------------------
 
