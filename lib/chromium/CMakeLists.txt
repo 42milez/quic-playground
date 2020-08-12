@@ -225,6 +225,7 @@ add_library(chromium STATIC
     base/trace_event/process_memory_dump.cc
     base/trace_event/thread_instruction_count.cc
     base/trace_event/trace_arguments.cc
+    base/trace_event/trace_buffer.cc
     base/trace_event/trace_config.cc
     base/trace_event/trace_config_category_filter.cc
     base/trace_event/trace_event_filter.cc
@@ -239,6 +240,7 @@ add_library(chromium STATIC
     base/values.cc
     base/vlog.cc
     third_party/perfetto/protos/perfetto/common/builtin_clock.pbzero.cc
+    third_party/perfetto/protos/perfetto/config/data_source_config.gen.cc
     third_party/perfetto/protos/perfetto/trace/interned_data/interned_data.pbzero.cc
     third_party/perfetto/protos/perfetto/trace/trace_packet.pbzero.cc
     third_party/perfetto/protos/perfetto/trace/track_event/chrome_process_descriptor.gen.cc
@@ -264,6 +266,8 @@ add_library(chromium STATIC
     third_party/perfetto/src/tracing/internal/track_event_internal.cc
     third_party/perfetto/src/tracing/trace_writer_base.cc
     third_party/perfetto/src/tracing/track.cc
+    third_party/tcmalloc/chromium/src/stacktrace.cc
+    third_party/tcmalloc/chromium/src/sysinfo.cc
 )
 target_include_directories(chromium PUBLIC "${PROJECT_SOURCE_DIR}/lib/chromium")
 set_source_files_properties(

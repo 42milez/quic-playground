@@ -371,6 +371,7 @@ readonly BASE_FILES=(
   base/trace_event/process_memory_dump
   base/trace_event/thread_instruction_count
   base/trace_event/trace_arguments
+  base/trace_event/trace_buffer
   base/trace_event/trace_category
   base/trace_event/trace_config
   base/trace_event/trace_config_category_filter
@@ -421,6 +422,7 @@ readonly GEN_FILES=(
   base/tracing_buildflags
   build/lacros_buildflags
   third_party/perfetto/protos/perfetto/common/builtin_clock.pbzero
+  third_party/perfetto/protos/perfetto/config/data_source_config.gen
   third_party/perfetto/protos/perfetto/trace/interned_data/interned_data.pbzero
   third_party/perfetto/protos/perfetto/trace/trace_packet.pbzero
   third_party/perfetto/protos/perfetto/trace/track_event/chrome_process_descriptor.gen
@@ -486,7 +488,9 @@ readonly PERFETTO_FILES=(
   base/proc_utils
   base/thread_utils
   base/time
+  ext/base/optional
   ext/base/utils
+  ext/base/uuid
   protozero/contiguous_memory_range
   protozero/copyable_ptr
   protozero/cpp_message_obj
@@ -555,7 +559,68 @@ done
 
 # --------------------------------------------------
 
+readonly TCMALLOC_SOURCE_DIR=third_party/tcmalloc/chromium/src
 
+mkdir -p "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
+
+cp -p "$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/config.h" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
+cp -p "$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/config_linux.h" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
+
+# --------------------------------------------------
+
+readonly TCMALLOC_BASE_HEADER_DIR=$TCMALLOC_SOURCE_DIR/base
+readonly TCMALLOC_BASE_SOURCE_DIR=$TCMALLOC_SOURCE_DIR/base
+readonly TCMALLOC_BASE_FILES=(
+  basictypes
+  commandlineflags
+  sysinfo
+)
+
+mkdir -p "$TMP_DIR/$TCMALLOC_BASE_HEADER_DIR"
+mkdir -p "$TMP_DIR/$TCMALLOC_BASE_SOURCE_DIR"
+
+for file in "${TCMALLOC_BASE_FILES[@]}"; do
+  header="$CHROMIUM_DIR/src/$TCMALLOC_BASE_HEADER_DIR/$file.h"
+  if [ -e "$header" ]; then
+    cp -p "$header" "$TMP_DIR/$TCMALLOC_BASE_HEADER_DIR"
+  fi
+
+  source="$CHROMIUM_DIR/src/$TCMALLOC_BASE_SOURCE_DIR/$file.cc"
+  if [ -e "$source" ]; then
+    cp -p "$source" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
+  fi
+done
+
+# --------------------------------------------------
+
+readonly TCMALLOC_GPERFTOOLS_HEADER_DIR=$TCMALLOC_SOURCE_DIR/gperftools
+readonly TCMALLOC_GPERFTOOLS_SOURCE_DIR=$TCMALLOC_SOURCE_DIR
+readonly TCMALLOC_GPERFTOOLS_FILES=(
+  stacktrace
+)
+
+mkdir -p "$TMP_DIR/$TCMALLOC_GPERFTOOLS_HEADER_DIR"
+mkdir -p "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
+
+for file in "${TCMALLOC_GPERFTOOLS_FILES[@]}"; do
+  header="$CHROMIUM_DIR/src/$TCMALLOC_GPERFTOOLS_HEADER_DIR/$file.h"
+  if [ -e "$header" ]; then
+    cp -p "$header" "$TMP_DIR/$TCMALLOC_GPERFTOOLS_HEADER_DIR"
+  fi
+
+  source="$CHROMIUM_DIR/src/$TCMALLOC_GPERFTOOLS_SOURCE_DIR/$file.cc"
+  if [ -e "$source" ]; then
+    cp -p "$source" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
+  fi
+done
+
+# --------------------------------------------------
+
+find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | \
+     xargs -0 sed -i -e "s/<config\.h>/\"third_party\/tcmalloc\/chromium\/src\/config\.h\"/"
+
+find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | \
+     xargs -0 sed -i -e "s/\"base\/basictypes\.h\"/\"third_party\/tcmalloc\/chromium\/src\/base\/basictypes\.h\"/"
 
 # --------------------------------------------------
 
