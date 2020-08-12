@@ -64,10 +64,6 @@ set_source_files_properties(
     base/task/thread_pool/job_task_source.cc
     PROPERTIES COMPILE_FLAGS -Wno-c++11-narrowing
 )
-set_source_files_properties(
-    base/macros.h
-    PROPERTIES COMPILE_FLAGS -Wno-macro-redefined
-)
 EOS
 
 sed -i 's/\.\/lib\/chromium\//    /g' "$CHROMIUM_DIR/CMakeLists.txt"

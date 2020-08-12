@@ -47,7 +47,7 @@
 #include <stddef.h>    // for size_t
 #include <limits.h>    // for PATH_MAX
 #include "third_party/tcmalloc/chromium/src/base/basictypes.h"
-#include "base/logging.h"   // for RawFD
+#include "third_party/tcmalloc/chromium/src/base/logging.h"   // for RawFD
 
 // This getenv function is safe to call before the C runtime is initialized.
 // On Windows, it utilizes GetEnvironmentVariable() and on unix it uses

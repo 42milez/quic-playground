@@ -57,9 +57,9 @@
 #include <tlhelp32.h>         // for Module32First()
 #endif
 #include "base/sysinfo.h"
-#include "base/commandlineflags.h"
+#include "third_party/tcmalloc/chromium/src/base/commandlineflags.h"
 #include "base/dynamic_annotations.h"   // for RunningOnValgrind
-#include "base/logging.h"
+#include "third_party/tcmalloc/chromium/src/base/logging.h"
 
 #ifdef PLATFORM_WINDOWS
 #ifdef MODULEENTRY32

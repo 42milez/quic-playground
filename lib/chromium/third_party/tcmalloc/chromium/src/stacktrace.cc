@@ -58,7 +58,7 @@
 #include <string.h> // for strcmp
 #include <stdio.h> // for fprintf
 #include "gperftools/stacktrace.h"
-#include "base/commandlineflags.h"
+#include "third_party/tcmalloc/chromium/src/base/commandlineflags.h"
 #include "base/googleinit.h"
 #include "getenv_safe.h"
 

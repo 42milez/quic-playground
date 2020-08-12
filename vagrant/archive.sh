@@ -422,15 +422,23 @@ readonly GEN_FILES=(
   base/tracing_buildflags
   build/lacros_buildflags
   third_party/perfetto/protos/perfetto/common/builtin_clock.pbzero
+  third_party/perfetto/protos/perfetto/common/data_source_descriptor.gen
+  third_party/perfetto/protos/perfetto/common/track_event_descriptor.pbzero
+  third_party/perfetto/protos/perfetto/config/chrome/chrome_config.gen
   third_party/perfetto/protos/perfetto/config/data_source_config.gen
+  third_party/perfetto/protos/perfetto/config/test_config.gen
+  third_party/perfetto/protos/perfetto/config/track_event/track_event_config.gen
   third_party/perfetto/protos/perfetto/trace/interned_data/interned_data.pbzero
   third_party/perfetto/protos/perfetto/trace/trace_packet.pbzero
+  third_party/perfetto/protos/perfetto/trace/trace_packet_defaults.pbzero
   third_party/perfetto/protos/perfetto/trace/track_event/chrome_process_descriptor.gen
   third_party/perfetto/protos/perfetto/trace/track_event/chrome_thread_descriptor.gen
   third_party/perfetto/protos/perfetto/trace/track_event/counter_descriptor.gen
   third_party/perfetto/protos/perfetto/trace/track_event/debug_annotation.pbzero
   third_party/perfetto/protos/perfetto/trace/track_event/process_descriptor.gen
+  third_party/perfetto/protos/perfetto/trace/track_event/process_descriptor.pbzero
   third_party/perfetto/protos/perfetto/trace/track_event/thread_descriptor.gen
+  third_party/perfetto/protos/perfetto/trace/track_event/thread_descriptor.pbzero
   third_party/perfetto/protos/perfetto/trace/track_event/track_descriptor.gen
   third_party/perfetto/protos/perfetto/trace/track_event/track_descriptor.pbzero
   third_party/perfetto/protos/perfetto/trace/track_event/track_event.pbzero
@@ -502,13 +510,26 @@ readonly PERFETTO_FILES=(
   protozero/proto_utils
   protozero/scattered_heap_buffer
   protozero/scattered_stream_writer
+  tracing/buffer_exhausted_policy
   tracing/core/data_source_config
   tracing/core/forward_decls
+  tracing/data_source
   tracing/debug_annotation
   tracing/event_context
+  tracing/internal/basic_types
+  tracing/internal/data_source_internal
+  tracing/internal/tracing_muxer
+  tracing/internal/tracing_tls
+  tracing/internal/track_event_data_source
   tracing/internal/track_event_internal
+  tracing/internal/track_event_macros
+  tracing/locked_handle
+  tracing/platform
   tracing/trace_writer_base
   tracing/track
+  tracing/track_event
+  tracing/track_event_category_registry
+  tracing/track_event_interned_data_index
 )
 
 for file in "${PERFETTO_FILES[@]}"; do
@@ -565,15 +586,24 @@ mkdir -p "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
 
 cp -p "$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/config.h" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
 cp -p "$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/config_linux.h" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
+cp -p "$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/getenv_safe.h" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
+cp -p "$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/stacktrace_impl_setup-inl.h" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
+cp -p "$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/stacktrace_x86-inl.h" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
 
 # --------------------------------------------------
 
 readonly TCMALLOC_BASE_HEADER_DIR=$TCMALLOC_SOURCE_DIR/base
 readonly TCMALLOC_BASE_SOURCE_DIR=$TCMALLOC_SOURCE_DIR/base
 readonly TCMALLOC_BASE_FILES=(
+  abort
   basictypes
   commandlineflags
+  dynamic_annotations
+  elf_mem_image
+  googleinit
+  logging
   sysinfo
+  vdso_support
 )
 
 mkdir -p "$TMP_DIR/$TCMALLOC_BASE_HEADER_DIR"
@@ -620,7 +650,19 @@ find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | \
      xargs -0 sed -i -e "s/<config\.h>/\"third_party\/tcmalloc\/chromium\/src\/config\.h\"/"
 
 find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | \
+     xargs -0 sed -i -e "s/\"base\/abort\.h\"/\"third_party\/tcmalloc\/chromium\/src\/base\/abort\.h\"/"
+
+find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | \
      xargs -0 sed -i -e "s/\"base\/basictypes\.h\"/\"third_party\/tcmalloc\/chromium\/src\/base\/basictypes\.h\"/"
+
+find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | \
+     xargs -0 sed -i -e "s/\"base\/commandlineflags\.h\"/\"third_party\/tcmalloc\/chromium\/src\/base\/commandlineflags\.h\"/"
+
+find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | \
+     xargs -0 sed -i -e "s/\"base\/elf_mem_image\.h\"/\"third_party\/tcmalloc\/chromium\/src\/base\/elf_mem_image\.h\"/"
+
+find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | \
+     xargs -0 sed -i -e "s/\"base\/logging\.h\"/\"third_party\/tcmalloc\/chromium\/src\/base\/logging\.h\"/"
 
 # --------------------------------------------------
 

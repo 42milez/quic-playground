@@ -240,15 +240,23 @@ add_library(chromium STATIC
     base/values.cc
     base/vlog.cc
     third_party/perfetto/protos/perfetto/common/builtin_clock.pbzero.cc
+    third_party/perfetto/protos/perfetto/common/data_source_descriptor.gen.cc
+    third_party/perfetto/protos/perfetto/common/track_event_descriptor.pbzero.cc
+    third_party/perfetto/protos/perfetto/config/chrome/chrome_config.gen.cc
     third_party/perfetto/protos/perfetto/config/data_source_config.gen.cc
+    third_party/perfetto/protos/perfetto/config/test_config.gen.cc
+    third_party/perfetto/protos/perfetto/config/track_event/track_event_config.gen.cc
     third_party/perfetto/protos/perfetto/trace/interned_data/interned_data.pbzero.cc
     third_party/perfetto/protos/perfetto/trace/trace_packet.pbzero.cc
+    third_party/perfetto/protos/perfetto/trace/trace_packet_defaults.pbzero.cc
     third_party/perfetto/protos/perfetto/trace/track_event/chrome_process_descriptor.gen.cc
     third_party/perfetto/protos/perfetto/trace/track_event/chrome_thread_descriptor.gen.cc
     third_party/perfetto/protos/perfetto/trace/track_event/counter_descriptor.gen.cc
     third_party/perfetto/protos/perfetto/trace/track_event/debug_annotation.pbzero.cc
     third_party/perfetto/protos/perfetto/trace/track_event/process_descriptor.gen.cc
+    third_party/perfetto/protos/perfetto/trace/track_event/process_descriptor.pbzero.cc
     third_party/perfetto/protos/perfetto/trace/track_event/thread_descriptor.gen.cc
+    third_party/perfetto/protos/perfetto/trace/track_event/thread_descriptor.pbzero.cc
     third_party/perfetto/protos/perfetto/trace/track_event/track_descriptor.gen.cc
     third_party/perfetto/protos/perfetto/trace/track_event/track_descriptor.pbzero.cc
     third_party/perfetto/protos/perfetto/trace/track_event/track_event.pbzero.cc
@@ -261,13 +269,20 @@ add_library(chromium STATIC
     third_party/perfetto/src/protozero/proto_decoder.cc
     third_party/perfetto/src/protozero/scattered_heap_buffer.cc
     third_party/perfetto/src/protozero/scattered_stream_writer.cc
+    third_party/perfetto/src/tracing/data_source.cc
     third_party/perfetto/src/tracing/debug_annotation.cc
     third_party/perfetto/src/tracing/event_context.cc
     third_party/perfetto/src/tracing/internal/track_event_internal.cc
+    third_party/perfetto/src/tracing/platform.cc
     third_party/perfetto/src/tracing/trace_writer_base.cc
     third_party/perfetto/src/tracing/track.cc
+    third_party/perfetto/src/tracing/track_event_category_registry.cc
+    third_party/tcmalloc/chromium/src/abort.cc
+    third_party/tcmalloc/chromium/src/elf_mem_image.cc
+    third_party/tcmalloc/chromium/src/logging.cc
     third_party/tcmalloc/chromium/src/stacktrace.cc
     third_party/tcmalloc/chromium/src/sysinfo.cc
+    third_party/tcmalloc/chromium/src/vdso_support.cc
 )
 target_include_directories(chromium PUBLIC "${PROJECT_SOURCE_DIR}/lib/chromium")
 set_source_files_properties(
@@ -293,8 +308,4 @@ set_source_files_properties(
 set_source_files_properties(
     base/task/thread_pool/job_task_source.cc
     PROPERTIES COMPILE_FLAGS -Wno-c++11-narrowing
-)
-set_source_files_properties(
-    base/macros.h
-    PROPERTIES COMPILE_FLAGS -Wno-macro-redefined
 )
