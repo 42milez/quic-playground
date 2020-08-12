@@ -62,7 +62,7 @@ typedef ucontext ucontext_t;
 #endif
 #ifdef HAVE_MMAP
 #include <sys/mman.h> // for msync
-#include "base/vdso_support.h"
+#include "third_party/tcmalloc/chromium/src/base/vdso_support.h"
 #endif
 
 #include "gperftools/stacktrace.h"

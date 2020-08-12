@@ -581,17 +581,43 @@ done
 # --------------------------------------------------
 
 readonly TCMALLOC_SOURCE_DIR=third_party/tcmalloc/chromium/src
+readonly TCMALLOC_FILES=(
+  addressmap-inl
+  common
+  config
+  config_linux
+  free_list
+  getenv_safe
+  heap-profile-stats
+  heap-profile-table
+  internal_logging
+  linked_list
+  malloc_hook-inl
+  malloc_hook_mmap_linux
+  maybe_emergency_malloc
+  maybe_threads
+  memory_region_map
+  raw_printer
+  stacktrace_impl_setup-inl
+  stacktrace_x86-inl
+  symbolize
+  system-alloc
+  tcmalloc_guard
+)
 
 mkdir -p "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
 
-cp -p "$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/common.h" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
-cp -p "$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/config.h" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
-cp -p "$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/config_linux.h" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
-cp -p "$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/free_list.h" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
-cp -p "$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/getenv_safe.h" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
-cp -p "$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/malloc_hook-inl.h" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
-cp -p "$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/stacktrace_impl_setup-inl.h" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
-cp -p "$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/stacktrace_x86-inl.h" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
+for file in "${TCMALLOC_FILES[@]}"; do
+  header="$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/$file.h"
+  if [ -e "$header" ]; then
+    cp -p "$header" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
+  fi
+
+  source="$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/$file.cc"
+  if [ -e "$source" ]; then
+    cp -p "$source" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
+  fi
+done
 
 # --------------------------------------------------
 
@@ -599,15 +625,25 @@ readonly TCMALLOC_BASE_HEADER_DIR=$TCMALLOC_SOURCE_DIR/base
 readonly TCMALLOC_BASE_SOURCE_DIR=$TCMALLOC_SOURCE_DIR/base
 readonly TCMALLOC_BASE_FILES=(
   abort
+  arm_instruction_set_select
+  atomicops
+  atomicops-internals-x86
   basictypes
   commandlineflags
   dynamic_annotations
   elf_mem_image
   elfcore
   googleinit
+  linux_syscall_support
   logging
+  low_level_alloc
   spinlock
+  spinlock_internal
+  spinlock_linux-inl
+  stl_allocator
   sysinfo
+  thread_annotations
+  thread_lister
   vdso_support
 )
 
@@ -657,38 +693,16 @@ done
 
 # --------------------------------------------------
 
-find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | \
-     xargs -0 sed -i -e "s/<config\.h>/\"third_party\/tcmalloc\/chromium\/src\/config\.h\"/"
+readonly TCMALLOC_REPLACE_PATTERNS=(
+  's/<config\.h>/"third_party\/tcmalloc\/chromium\/src\/config\.h"/g'
+  's/<gperftools\/\(.*\)>/"gperftools\/\1"/g'
+  's/"base/"third_party\/tcmalloc\/chromium\/src\/base/g'
+  's/"malloc_hook-inl\.h"/"third_party\/tcmalloc\/chromium\/src\/malloc_hook-inl\.h"/g'
+)
 
-find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | \
-     xargs -0 sed -i -e "s/\"malloc_hook-inl.h\"/\"third_party\/tcmalloc\/chromium\/src\/malloc_hook-inl.h\"/"
-
-find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | \
-     xargs -0 sed -i -e "s/\"base\/abort\.h\"/\"third_party\/tcmalloc\/chromium\/src\/base\/abort\.h\"/"
-
-find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | \
-     xargs -0 sed -i -e "s/\"base\/basictypes\.h\"/\"third_party\/tcmalloc\/chromium\/src\/base\/basictypes\.h\"/"
-
-find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | \
-     xargs -0 sed -i -e "s/\"base\/commandlineflags\.h\"/\"third_party\/tcmalloc\/chromium\/src\/base\/commandlineflags\.h\"/"
-
-find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | \
-     xargs -0 sed -i -e "s/\"base\/dynamic_annotations\.h\"/\"third_party\/tcmalloc\/chromium\/src\/base\/dynamic_annotations\.h\"/"
-
-find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | \
-     xargs -0 sed -i -e "s/\"base\/elf_mem_image\.h\"/\"third_party\/tcmalloc\/chromium\/src\/base\/elf_mem_image\.h\"/"
-
-find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | \
-     xargs -0 sed -i -e "s/\"base\/logging\.h\"/\"third_party\/tcmalloc\/chromium\/src\/base\/logging\.h\"/"
-
-find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | \
-     xargs -0 sed -i -e "s/<gperftools\/heap-checker\.h>/\"gperftools\/heap-checker\.h\"/"
-
-find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | \
-     xargs -0 sed -i -e "s/<gperftools\/heap-profiler\.h>/\"gperftools\/heap-profiler\.h\"/"
-
-find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | \
-     xargs -0 sed -i -e "s/<gperftools\/malloc_hook\.h>/\"gperftools\/malloc_hook\.h\"/"
+for pattern in "${TCMALLOC_REPLACE_PATTERNS[@]}"; do
+  find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | xargs -0 sed -i -e "$pattern"
+done
 
 # --------------------------------------------------
 

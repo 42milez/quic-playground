@@ -59,7 +59,7 @@
 #include <stdio.h> // for fprintf
 #include "gperftools/stacktrace.h"
 #include "third_party/tcmalloc/chromium/src/base/commandlineflags.h"
-#include "base/googleinit.h"
+#include "third_party/tcmalloc/chromium/src/base/googleinit.h"
 #include "getenv_safe.h"
 
 

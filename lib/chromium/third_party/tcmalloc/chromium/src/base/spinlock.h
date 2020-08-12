@@ -40,10 +40,10 @@
 #define BASE_SPINLOCK_H_
 
 #include "third_party/tcmalloc/chromium/src/config.h"
-#include "base/atomicops.h"
+#include "third_party/tcmalloc/chromium/src/base/atomicops.h"
 #include "third_party/tcmalloc/chromium/src/base/basictypes.h"
 #include "third_party/tcmalloc/chromium/src/base/dynamic_annotations.h"
-#include "base/thread_annotations.h"
+#include "third_party/tcmalloc/chromium/src/base/thread_annotations.h"
 
 class LOCKABLE SpinLock {
  public:

@@ -48,7 +48,7 @@
 #endif
 #include <algorithm>
 #include "third_party/tcmalloc/chromium/src/base/logging.h"
-#include "base/spinlock.h"
+#include "third_party/tcmalloc/chromium/src/base/spinlock.h"
 #include "maybe_emergency_malloc.h"
 #include "maybe_threads.h"
 #include "third_party/tcmalloc/chromium/src/malloc_hook-inl.h"
@@ -60,7 +60,7 @@
   // We use #define so code compiles even if you #include stacktrace.h somehow.
 # define GetStackTrace(stack, depth, skip)  (0)
 #else
-# include <gperftools/stacktrace.h>
+# include "gperftools/stacktrace.h"
 #endif
 
 // __THROW is defined in glibc systems.  It means, counter-intuitively,

@@ -33,9 +33,9 @@
  */
 
 #include "third_party/tcmalloc/chromium/src/config.h"
-#include "base/spinlock.h"
-#include "base/spinlock_internal.h"
-#include "base/sysinfo.h"   /* for GetSystemCPUsCount() */
+#include "third_party/tcmalloc/chromium/src/base/spinlock.h"
+#include "third_party/tcmalloc/chromium/src/base/spinlock_internal.h"
+#include "third_party/tcmalloc/chromium/src/base/sysinfo.h"   /* for GetSystemCPUsCount() */
 
 // NOTE on the Lock-state values:
 //

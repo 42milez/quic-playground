@@ -278,15 +278,27 @@ add_library(chromium STATIC
     third_party/perfetto/src/tracing/track.cc
     third_party/perfetto/src/tracing/track_event_category_registry.cc
     third_party/tcmalloc/chromium/src/abort.cc
+    third_party/tcmalloc/chromium/src/atomicops-internals-x86.cc
+    third_party/tcmalloc/chromium/src/common.cc
     third_party/tcmalloc/chromium/src/elf_mem_image.cc
+    third_party/tcmalloc/chromium/src/free_list.cc
     third_party/tcmalloc/chromium/src/heap-checker.cc
+    third_party/tcmalloc/chromium/src/heap-profile-table.cc
     third_party/tcmalloc/chromium/src/heap-profiler.cc
+    third_party/tcmalloc/chromium/src/internal_logging.cc
     third_party/tcmalloc/chromium/src/logging.cc
+    third_party/tcmalloc/chromium/src/low_level_alloc.cc
     third_party/tcmalloc/chromium/src/malloc_extension.cc
     third_party/tcmalloc/chromium/src/malloc_hook.cc
+    third_party/tcmalloc/chromium/src/maybe_threads.cc
+    third_party/tcmalloc/chromium/src/memory_region_map.cc
+    third_party/tcmalloc/chromium/src/raw_printer.cc
     third_party/tcmalloc/chromium/src/spinlock.cc
+    third_party/tcmalloc/chromium/src/spinlock_internal.cc
     third_party/tcmalloc/chromium/src/stacktrace.cc
+    third_party/tcmalloc/chromium/src/symbolize.cc
     third_party/tcmalloc/chromium/src/sysinfo.cc
+    third_party/tcmalloc/chromium/src/system-alloc.cc
     third_party/tcmalloc/chromium/src/vdso_support.cc
 )
 target_include_directories(chromium PUBLIC "${PROJECT_SOURCE_DIR}/lib/chromium")
@@ -313,4 +325,12 @@ set_source_files_properties(
 set_source_files_properties(
     base/task/thread_pool/job_task_source.cc
     PROPERTIES COMPILE_FLAGS -Wno-c++11-narrowing
+)
+set_source_files_properties(
+    third_party/tcmalloc/chromium/src/heap-profiler.cc
+    PROPERTIES COMPILE_FLAGS -Wno-unused-function
+)
+set_source_files_properties(
+    third_party/tcmalloc/chromium/src/heap-checker.cc
+    PROPERTIES COMPILE_FLAGS -Wno-string-compare
 )

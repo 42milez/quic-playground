@@ -40,7 +40,7 @@
 
 #include <stddef.h>
 #include <sys/types.h>
-#include "base/atomicops.h"
+#include "third_party/tcmalloc/chromium/src/base/atomicops.h"
 #include "third_party/tcmalloc/chromium/src/base/basictypes.h"
 #include "gperftools/malloc_hook.h"
 

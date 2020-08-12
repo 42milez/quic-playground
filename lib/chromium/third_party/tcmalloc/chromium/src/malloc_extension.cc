@@ -45,14 +45,14 @@
 #include <atomic>
 #include <string>
 #include "third_party/tcmalloc/chromium/src/base/dynamic_annotations.h"
-#include "base/sysinfo.h"    // for FillProcSelfMaps
+#include "third_party/tcmalloc/chromium/src/base/sysinfo.h"    // for FillProcSelfMaps
 #ifndef NO_HEAP_CHECK
 #include "gperftools/heap-checker.h"
 #endif
 #include "gperftools/malloc_extension.h"
 #include "gperftools/malloc_extension_c.h"
 #include "maybe_threads.h"
-#include "base/googleinit.h"
+#include "third_party/tcmalloc/chromium/src/base/googleinit.h"
 
 using STL_NAMESPACE::string;
 using STL_NAMESPACE::vector;

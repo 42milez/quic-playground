@@ -61,15 +61,15 @@
 
 #include "third_party/tcmalloc/chromium/src/base/logging.h"
 #include "third_party/tcmalloc/chromium/src/base/basictypes.h"   // for PRId64, among other things
-#include "base/googleinit.h"
+#include "third_party/tcmalloc/chromium/src/base/googleinit.h"
 #include "third_party/tcmalloc/chromium/src/base/commandlineflags.h"
 #include "third_party/tcmalloc/chromium/src/malloc_hook-inl.h"
 #include "tcmalloc_guard.h"
 #include "gperftools/malloc_hook.h"
-#include <gperftools/malloc_extension.h>
-#include "base/spinlock.h"
-#include "base/low_level_alloc.h"
-#include "base/sysinfo.h"      // for GetUniquePathFromEnv()
+#include "gperftools/malloc_extension.h"
+#include "third_party/tcmalloc/chromium/src/base/spinlock.h"
+#include "third_party/tcmalloc/chromium/src/base/low_level_alloc.h"
+#include "third_party/tcmalloc/chromium/src/base/sysinfo.h"      // for GetUniquePathFromEnv()
 #include "heap-profile-table.h"
 #include "memory_region_map.h"
 

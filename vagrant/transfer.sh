@@ -64,6 +64,14 @@ set_source_files_properties(
     base/task/thread_pool/job_task_source.cc
     PROPERTIES COMPILE_FLAGS -Wno-c++11-narrowing
 )
+set_source_files_properties(
+    third_party/tcmalloc/chromium/src/heap-profiler.cc
+    PROPERTIES COMPILE_FLAGS -Wno-unused-function
+)
+set_source_files_properties(
+    third_party/tcmalloc/chromium/src/heap-checker.cc
+    PROPERTIES COMPILE_FLAGS -Wno-string-compare
+)
 EOS
 
 sed -i 's/\.\/lib\/chromium\//    /g' "$CHROMIUM_DIR/CMakeLists.txt"

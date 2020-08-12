@@ -35,7 +35,7 @@
 // VDSOSupport -- a class representing kernel VDSO (if present).
 //
 
-#include "base/vdso_support.h"
+#include "third_party/tcmalloc/chromium/src/base/vdso_support.h"
 
 #ifdef HAVE_VDSO_SUPPORT     // defined in vdso_support.h
 
