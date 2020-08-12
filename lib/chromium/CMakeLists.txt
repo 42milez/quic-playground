@@ -1,51 +1,214 @@
 add_library(chromium STATIC
+    base/allocator/partition_allocator/address_space_randomization.cc
+    base/allocator/partition_allocator/page_allocator.cc
+    base/allocator/partition_allocator/random.cc
+    base/allocator/partition_allocator/spin_lock.cc
+    base/at_exit.cc
+    base/base_paths.cc
+    base/base_paths_posix.cc
     base/base_switches.cc
+    base/callback_helpers.cc
     base/callback_internal.cc
     base/check.cc
     base/check_op.cc
+    base/command_line.cc
+    base/containers/intrusive_heap.cc
+    base/cpu.cc
+    base/debug/activity_tracker.cc
+    base/debug/alias.cc
+    base/debug/crash_logging.cc
+    base/debug/debugger.cc
+    base/debug/dump_without_crashing.cc
+    base/debug/stack_trace.cc
+    base/debug/task_trace.cc
+    base/environment.cc
+    base/feature_list.cc
+    base/files/file.cc
+    base/files/file_descriptor_watcher_posix.cc
+    base/files/file_enumerator.cc
     base/files/file_path.cc
+    base/files/file_tracing.cc
+    base/files/file_util.cc
+    base/files/important_file_writer.cc
+    base/files/important_file_writer_cleaner.cc
+    base/files/memory_mapped_file.cc
+    base/files/scoped_file.cc
     base/hash/hash.cc
+    base/hash/md5_boringssl.cc
+    base/json/json_parser.cc
+    base/json/json_reader.cc
+    base/json/json_string_value_serializer.cc
+    base/json/json_writer.cc
+    base/json/string_escape.cc
+    base/lazy_instance_helpers.cc
     base/location.cc
     base/logging.cc
+    base/memory/aligned_memory.cc
+    base/memory/platform_shared_memory_region.cc
+    base/memory/read_only_shared_memory_region.cc
     base/memory/ref_counted.cc
+    base/memory/shared_memory_mapping.cc
+    base/memory/shared_memory_security_policy.cc
+    base/memory/shared_memory_tracker.cc
+    base/memory/unsafe_shared_memory_region.cc
     base/memory/weak_ptr.cc
+    base/memory/writable_shared_memory_region.cc
+    base/message_loop/message_pump.cc
+    base/message_loop/message_pump_default.cc
+    base/message_loop/message_pump_libevent.cc
+    base/message_loop/watchable_io_message_pump_posix.cc
+    base/message_loop/work_id_provider.cc
+    base/metrics/bucket_ranges.cc
+    base/metrics/crc32.cc
+    base/metrics/dummy_histogram.cc
+    base/metrics/field_trial.cc
+    base/metrics/field_trial_param_associator.cc
+    base/metrics/field_trial_params.cc
+    base/metrics/histogram.cc
+    base/metrics/histogram_base.cc
+    base/metrics/histogram_functions.cc
+    base/metrics/histogram_samples.cc
+    base/metrics/histogram_snapshot_manager.cc
+    base/metrics/metrics_hashes.cc
+    base/metrics/persistent_histogram_allocator.cc
+    base/metrics/persistent_memory_allocator.cc
+    base/metrics/persistent_sample_map.cc
+    base/metrics/sample_map.cc
+    base/metrics/sample_vector.cc
+    base/metrics/sparse_histogram.cc
+    base/metrics/statistics_recorder.cc
+    base/nix/xdg_util.cc
     base/notreached.cc
     base/observer_list_internal.cc
+    base/observer_list_threadsafe.cc
     base/observer_list_types.cc
+    base/path_service.cc
     base/pending_task.cc
     base/pickle.cc
+    base/posix/file_descriptor_shuffle.cc
+    base/posix/global_descriptors.cc
+    base/posix/safe_strerror.cc
+    base/process/launch.cc
+    base/process/memory.cc
     base/process/process_handle.cc
+    base/process/process_metrics.cc
     base/rand_util.cc
+    base/run_loop.cc
     base/sequence_checker_impl.cc
     base/sequence_token.cc
     base/sequenced_task_runner.cc
+    base/strings/escape.cc
     base/strings/strcat.cc
     base/strings/string16.cc
     base/strings/string_number_conversions.cc
     base/strings/string_piece.cc
+    base/strings/string_split.cc
     base/strings/string_util.cc
     base/strings/stringprintf.cc
+    base/strings/utf_offset_string_conversions.cc
+    base/strings/utf_string_conversion_utils.cc
     base/strings/utf_string_conversions.cc
     base/synchronization/atomic_flag.cc
     base/synchronization/lock.cc
+    base/system/sys_info.cc
+    base/task/common/checked_lock_impl.cc
+    base/task/common/operations_controller.cc
+    base/task/common/scoped_defer_task_posting.cc
     base/task/common/task_annotator.cc
+    base/task/current_thread.cc
+    base/task/post_job.cc
+    base/task/post_task.cc
+    base/task/scoped_set_task_priority_for_current_thread.cc
+    base/task/sequence_manager/associated_thread_id.cc
+    base/task/sequence_manager/atomic_flag_set.cc
+    base/task/sequence_manager/enqueue_order_generator.cc
+    base/task/sequence_manager/lazy_now.cc
+    base/task/sequence_manager/real_time_domain.cc
+    base/task/sequence_manager/sequence_manager.cc
+    base/task/sequence_manager/sequence_manager_impl.cc
+    base/task/sequence_manager/task_queue.cc
+    base/task/sequence_manager/task_queue_impl.cc
+    base/task/sequence_manager/task_queue_selector.cc
+    base/task/sequence_manager/tasks.cc
+    base/task/sequence_manager/thread_controller_impl.cc
+    base/task/sequence_manager/thread_controller_with_message_pump_impl.cc
+    base/task/sequence_manager/time_domain.cc
+    base/task/sequence_manager/work_deduplicator.cc
+    base/task/sequence_manager/work_queue.cc
+    base/task/sequence_manager/work_queue_sets.cc
+    base/task/simple_task_executor.cc
+    base/task/task_executor.cc
+    base/task/task_features.cc
+    base/task/task_traits.cc
+    base/task/thread_pool.cc
+    base/task/thread_pool/delayed_task_manager.cc
+    base/task/thread_pool/environment_config.cc
+    base/task/thread_pool/job_task_source.cc
+    base/task/thread_pool/pooled_parallel_task_runner.cc
+    base/task/thread_pool/pooled_sequenced_task_runner.cc
+    base/task/thread_pool/pooled_single_thread_task_runner_manager.cc
+    base/task/thread_pool/pooled_task_runner_delegate.cc
+    base/task/thread_pool/priority_queue.cc
+    base/task/thread_pool/sequence.cc
+    base/task/thread_pool/sequence_sort_key.cc
+    base/task/thread_pool/service_thread.cc
+    base/task/thread_pool/task.cc
+    base/task/thread_pool/task_source.cc
+    base/task/thread_pool/task_tracker.cc
+    base/task/thread_pool/task_tracker_posix.cc
+    base/task/thread_pool/thread_group.cc
+    base/task/thread_pool/thread_group_impl.cc
+    base/task/thread_pool/thread_pool_impl.cc
+    base/task/thread_pool/thread_pool_instance.cc
+    base/task/thread_pool/worker_thread.cc
+    base/task/thread_pool/worker_thread_stack.cc
     base/task_runner.cc
     base/third_party/cityhash/city.cc
+    base/third_party/double_conversion/double-conversion/bignum-dtoa.cc
+    base/third_party/double_conversion/double-conversion/bignum.cc
+    base/third_party/double_conversion/double-conversion/cached-powers.cc
+    base/third_party/double_conversion/double-conversion/double-to-string.cc
+    base/third_party/double_conversion/double-conversion/fast-dtoa.cc
+    base/third_party/double_conversion/double-conversion/fixed-dtoa.cc
+    base/third_party/double_conversion/double-conversion/string-to-double.cc
+    base/third_party/double_conversion/double-conversion/strtod.cc
+    base/third_party/icu/icu_utf.cc
     base/third_party/nspr/prtime.cc
+    base/third_party/xdg_user_dirs/xdg_user_dir_lookup.cc
+    base/threading/hang_watcher.cc
     base/threading/platform_thread.cc
+    base/threading/post_task_and_reply_impl.cc
+    base/threading/scoped_blocking_call.cc
+    base/threading/scoped_blocking_call_internal.cc
+    base/threading/sequence_local_storage_map.cc
+    base/threading/sequenced_task_runner_handle.cc
+    base/threading/simple_thread.cc
+    base/threading/thread.cc
     base/threading/thread_checker_impl.cc
     base/threading/thread_collision_warner.cc
+    base/threading/thread_id_name_manager.cc
     base/threading/thread_local_storage.cc
+    base/threading/thread_restrictions.cc
+    base/threading/thread_task_runner_handle.cc
+    base/time/default_tick_clock.cc
+    base/time/tick_clock.cc
     base/time/time.cc
     base/time/time_override.cc
+    base/timer/elapsed_timer.cc
+    base/timer/timer.cc
+    base/token.cc
     base/trace_event/blame_context.cc
     base/trace_event/builtin_categories.cc
     base/trace_event/category_registry.cc
     base/trace_event/heap_profiler_allocation_context.cc
     base/trace_event/heap_profiler_allocation_context_tracker.cc
     base/trace_event/log_message.cc
+    base/trace_event/memory_allocator_dump.cc
     base/trace_event/memory_allocator_dump_guid.cc
+    base/trace_event/memory_dump_manager.cc
+    base/trace_event/memory_dump_provider_info.cc
     base/trace_event/memory_dump_request_args.cc
+    base/trace_event/process_memory_dump.cc
     base/trace_event/thread_instruction_count.cc
     base/trace_event/trace_arguments.cc
     base/trace_event/trace_config.cc
@@ -56,8 +219,10 @@ add_library(chromium STATIC
     base/trace_event/trace_log.cc
     base/trace_event/traced_value.cc
     base/trace_event/typed_macros_internal.cc
+    base/unguessable_token.cc
     base/value_iterators.cc
     base/values.cc
+    base/vlog.cc
     third_party/perfetto/protos/perfetto/common/builtin_clock.pbzero.cc
     third_party/perfetto/protos/perfetto/trace/interned_data/interned_data.pbzero.cc
     third_party/perfetto/protos/perfetto/trace/trace_packet.pbzero.cc

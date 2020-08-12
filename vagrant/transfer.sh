@@ -17,6 +17,11 @@ tar -zxvf "$TMP_DIR/chromium.tar.gz"
 rm -rf "$CHROMIUM_DIR"
 mv "$TMP_DIR/chromium" "$CHROMIUM_DIR"
 
+OPENSSL_SYMLINK=$CHROMIUM_DIR/openssl
+if [ ! -e "$OPENSSL_SYMLINK" ]; then
+  ln -s "$CHROMIUM_DIR/third_party/boringssl/src/include/openssl" "$OPENSSL_SYMLINK"
+fi
+
 PERFETTO_SYMLINK=$CHROMIUM_DIR/perfetto
 if [ ! -e "$PERFETTO_SYMLINK" ]; then
   ln -s "$CHROMIUM_DIR/third_party/perfetto/include/perfetto" "$PERFETTO_SYMLINK"
