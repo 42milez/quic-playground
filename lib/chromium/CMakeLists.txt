@@ -264,12 +264,6 @@ add_library(chromium STATIC
     third_party/perfetto/src/tracing/internal/track_event_internal.cc
     third_party/perfetto/src/tracing/trace_writer_base.cc
     third_party/perfetto/src/tracing/track.cc
-    third_party/tcmalloc/chromium/src/base/sysinfo.cc
-    third_party/tcmalloc/chromium/src/heap-checker.cc
-    third_party/tcmalloc/chromium/src/heap-profiler.cc
-    third_party/tcmalloc/chromium/src/malloc_extension.cc
-    third_party/tcmalloc/chromium/src/malloc_hook.cc
-    third_party/tcmalloc/chromium/src/stacktrace.cc
 )
 target_include_directories(chromium PUBLIC "${PROJECT_SOURCE_DIR}/lib/chromium")
 set_source_files_properties(
