@@ -33,7 +33,7 @@
 //
 // TODO: Log large allocations
 
-#include <config.h>
+#include "config.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -57,7 +57,7 @@
 #include <algorithm>
 #include <string>
 
-#include <gperftools/heap-profiler.h>
+#include "gperftools/heap-profiler.h"
 
 #include "base/logging.h"
 #include "base/basictypes.h"   // for PRId64, among other things

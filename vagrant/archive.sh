@@ -522,6 +522,9 @@ for file in "${PERFETTO_FILES[@]}"; do
   fi
 done
 
+cp -p "$CHROMIUM_DIR/src/out/Debug/gen/third_party/perfetto/build_config/perfetto_build_flags.h" \
+      "$TMP_DIR/third_party/perfetto/include/perfetto/base"
+
 # --------------------------------------------------
 
 readonly BORINGSSL_HEADER_DIR=third_party/boringssl/src/include/openssl
@@ -551,34 +554,41 @@ done
 
 # --------------------------------------------------
 
-readonly GPREFTOOLS_HEADER_DIR=third_party/tcmalloc/chromium/src/gperftools
-readonly GPREFTOOLS_SOURCE_DIR=third_party/tcmalloc/chromium/src
-readonly GPREFTOOLS_FILES=(
+readonly TCMALLOC_HEADER_DIR=third_party/tcmalloc/chromium/src/gperftools
+readonly TCMALLOC_SOURCE_DIR=third_party/tcmalloc/chromium/src
+readonly TCMALLOC_FILES=(
   heap-profiler
   malloc_extension
   malloc_hook
   malloc_hook_c
 )
 
-for file in "${GPREFTOOLS_FILES[@]}"; do
+for file in "${TCMALLOC_FILES[@]}"; do
   dir=$(dirname "$file")
 
-  header="$CHROMIUM_DIR/src/$GPREFTOOLS_HEADER_DIR/$file.h"
+  header="$CHROMIUM_DIR/src/$TCMALLOC_HEADER_DIR/$file.h"
   if [ -e "$header" ]; then
-    mkdir -p "$TMP_DIR/$GPREFTOOLS_HEADER_DIR/$dir"
-    cp -p "$header" "$TMP_DIR/$GPREFTOOLS_HEADER_DIR/$dir"
+    mkdir -p "$TMP_DIR/$TCMALLOC_HEADER_DIR/$dir"
+    cp -p "$header" "$TMP_DIR/$TCMALLOC_HEADER_DIR/$dir"
   fi
 
-  source="$CHROMIUM_DIR/src/$GPREFTOOLS_SOURCE_DIR/$file.cc"
+  source="$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/$file.cc"
   if [ -e "$source" ]; then
-    mkdir -p "$TMP_DIR/$GPREFTOOLS_SOURCE_DIR/$dir"
-    cp -p "$source" "$TMP_DIR/$GPREFTOOLS_SOURCE_DIR/$dir"
+    mkdir -p "$TMP_DIR/$TCMALLOC_SOURCE_DIR/$dir"
+    cp -p "$source" "$TMP_DIR/$TCMALLOC_SOURCE_DIR/$dir"
   fi
 done
 
-# --------------------------------------------------
+cp -p "$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/config.h" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
+cp -p "$CHROMIUM_DIR/src/$TCMALLOC_SOURCE_DIR/config_linux.h" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
 
-cp -p "$CHROMIUM_DIR/src/out/Debug/gen/third_party/perfetto/build_config/perfetto_build_flags.h" \
-      "$TMP_DIR/third_party/perfetto/include/perfetto/base"
+sed -i 's/<config\.h>/"config\.h"/' "$TMP_DIR/$TCMALLOC_SOURCE_DIR/heap-profiler.cc"
+sed -i 's/<config\.h>/"config\.h"/' "$TMP_DIR/$TCMALLOC_SOURCE_DIR/malloc_extension.cc"
+sed -i 's/<config\.h>/"config\.h"/' "$TMP_DIR/$TCMALLOC_SOURCE_DIR/malloc_hook.cc"
+
+sed -i 's/<gperftools\/heap-profiler\.h>/"gperftools\/heap-profiler\.h"/' \
+       "$TMP_DIR/$TCMALLOC_SOURCE_DIR/heap-profiler.cc"
+
+# --------------------------------------------------
 
 tar -czvf tmp/chromium.tar.gz tmp/chromium

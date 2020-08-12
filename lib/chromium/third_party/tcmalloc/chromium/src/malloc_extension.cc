@@ -31,7 +31,7 @@
 // ---
 // Author: Sanjay Ghemawat <opensource@google.com>
 
-#include <config.h>
+#include "config.h"
 #include <assert.h>
 #include <string.h>
 #include <stdio.h>
