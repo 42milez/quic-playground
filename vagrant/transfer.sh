@@ -39,4 +39,31 @@ fi
   echo 'target_include_directories(chromium PUBLIC "${PROJECT_SOURCE_DIR}/lib/chromium")'
 } >> "$CHROMIUM_DIR/CMakeLists.txt"
 
+cat - << 'EOS' >> "$CHROMIUM_DIR/CMakeLists.txt"
+set_source_files_properties(
+    base/json/json_writer.cc
+    PROPERTIES COMPILE_FLAGS -Wno-implicit-int-float-conversion
+)
+set_source_files_properties(
+    base/time/time.cc
+    PROPERTIES COMPILE_FLAGS -Wno-narrowing
+)
+set_source_files_properties(
+    base/check.cc
+    base/check_op.cc
+    base/debug/alias.cc
+    base/logging.cc
+    base/notreached.cc
+    PROPERTIES COMPILE_FLAGS -Wno-unknown-pragmas
+)
+set_source_files_properties(
+    base/task/sequence_manager/task_queue_impl.h
+    PROPERTIES COMPILE_FLAGS -Wno-final-dtor-non-final-class
+)
+set_source_files_properties(
+    base/task/thread_pool/job_task_source.cc
+    PROPERTIES COMPILE_FLAGS -Wno-c++11-narrowing
+)
+EOS
+
 sed -i 's/\.\/lib\/chromium\//    /g' "$CHROMIUM_DIR/CMakeLists.txt"

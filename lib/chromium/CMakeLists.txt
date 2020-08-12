@@ -1,4 +1,5 @@
 add_library(chromium STATIC
+    base/allocator/allocator_extension.cc
     base/allocator/partition_allocator/address_space_randomization.cc
     base/allocator/partition_allocator/page_allocator.cc
     base/allocator/partition_allocator/random.cc
@@ -19,6 +20,7 @@ add_library(chromium STATIC
     base/debug/crash_logging.cc
     base/debug/debugger.cc
     base/debug/dump_without_crashing.cc
+    base/debug/profiler.cc
     base/debug/stack_trace.cc
     base/debug/task_trace.cc
     base/environment.cc
@@ -35,6 +37,7 @@ add_library(chromium STATIC
     base/files/scoped_file.cc
     base/hash/hash.cc
     base/hash/md5_boringssl.cc
+    base/hash/sha1.cc
     base/json/json_parser.cc
     base/json/json_reader.cc
     base/json/json_string_value_serializer.cc
@@ -47,6 +50,7 @@ add_library(chromium STATIC
     base/memory/platform_shared_memory_region.cc
     base/memory/read_only_shared_memory_region.cc
     base/memory/ref_counted.cc
+    base/memory/ref_counted_memory.cc
     base/memory/shared_memory_mapping.cc
     base/memory/shared_memory_security_policy.cc
     base/memory/shared_memory_tracker.cc
@@ -88,6 +92,8 @@ add_library(chromium STATIC
     base/posix/file_descriptor_shuffle.cc
     base/posix/global_descriptors.cc
     base/posix/safe_strerror.cc
+    base/power_monitor/power_monitor.cc
+    base/power_monitor/power_monitor_source.cc
     base/process/launch.cc
     base/process/memory.cc
     base/process/process_handle.cc
@@ -98,6 +104,7 @@ add_library(chromium STATIC
     base/sequence_token.cc
     base/sequenced_task_runner.cc
     base/strings/escape.cc
+    base/strings/pattern.cc
     base/strings/strcat.cc
     base/strings/string16.cc
     base/strings/string_number_conversions.cc
@@ -131,6 +138,7 @@ add_library(chromium STATIC
     base/task/sequence_manager/task_queue_selector.cc
     base/task/sequence_manager/tasks.cc
     base/task/sequence_manager/thread_controller_impl.cc
+    base/task/sequence_manager/thread_controller_power_monitor.cc
     base/task/sequence_manager/thread_controller_with_message_pump_impl.cc
     base/task/sequence_manager/time_domain.cc
     base/task/sequence_manager/work_deduplicator.cc
@@ -200,19 +208,26 @@ add_library(chromium STATIC
     base/trace_event/blame_context.cc
     base/trace_event/builtin_categories.cc
     base/trace_event/category_registry.cc
+    base/trace_event/event_name_filter.cc
     base/trace_event/heap_profiler_allocation_context.cc
     base/trace_event/heap_profiler_allocation_context_tracker.cc
+    base/trace_event/heap_profiler_event_filter.cc
     base/trace_event/log_message.cc
+    base/trace_event/malloc_dump_provider.cc
     base/trace_event/memory_allocator_dump.cc
     base/trace_event/memory_allocator_dump_guid.cc
     base/trace_event/memory_dump_manager.cc
     base/trace_event/memory_dump_provider_info.cc
     base/trace_event/memory_dump_request_args.cc
+    base/trace_event/memory_dump_scheduler.cc
+    base/trace_event/memory_infra_background_allowlist.cc
+    base/trace_event/memory_usage_estimator.cc
     base/trace_event/process_memory_dump.cc
     base/trace_event/thread_instruction_count.cc
     base/trace_event/trace_arguments.cc
     base/trace_event/trace_config.cc
     base/trace_event/trace_config_category_filter.cc
+    base/trace_event/trace_event_filter.cc
     base/trace_event/trace_event_impl.cc
     base/trace_event/trace_event_memory_overhead.cc
     base/trace_event/trace_event_stub.cc
@@ -226,11 +241,17 @@ add_library(chromium STATIC
     third_party/perfetto/protos/perfetto/common/builtin_clock.pbzero.cc
     third_party/perfetto/protos/perfetto/trace/interned_data/interned_data.pbzero.cc
     third_party/perfetto/protos/perfetto/trace/trace_packet.pbzero.cc
+    third_party/perfetto/protos/perfetto/trace/track_event/chrome_process_descriptor.gen.cc
+    third_party/perfetto/protos/perfetto/trace/track_event/chrome_thread_descriptor.gen.cc
+    third_party/perfetto/protos/perfetto/trace/track_event/counter_descriptor.gen.cc
     third_party/perfetto/protos/perfetto/trace/track_event/debug_annotation.pbzero.cc
+    third_party/perfetto/protos/perfetto/trace/track_event/process_descriptor.gen.cc
+    third_party/perfetto/protos/perfetto/trace/track_event/thread_descriptor.gen.cc
     third_party/perfetto/protos/perfetto/trace/track_event/track_descriptor.gen.cc
     third_party/perfetto/protos/perfetto/trace/track_event/track_descriptor.pbzero.cc
     third_party/perfetto/protos/perfetto/trace/track_event/track_event.pbzero.cc
     third_party/perfetto/src/base/logging.cc
+    third_party/perfetto/src/base/time.cc
     third_party/perfetto/src/protozero/field.cc
     third_party/perfetto/src/protozero/message.cc
     third_party/perfetto/src/protozero/message_handle.cc
@@ -243,5 +264,32 @@ add_library(chromium STATIC
     third_party/perfetto/src/tracing/internal/track_event_internal.cc
     third_party/perfetto/src/tracing/trace_writer_base.cc
     third_party/perfetto/src/tracing/track.cc
+    third_party/tcmalloc/chromium/src/heap-profiler.cc
+    third_party/tcmalloc/chromium/src/malloc_extension.cc
+    third_party/tcmalloc/chromium/src/malloc_hook.cc
 )
 target_include_directories(chromium PUBLIC "${PROJECT_SOURCE_DIR}/lib/chromium")
+set_source_files_properties(
+    base/json/json_writer.cc
+    PROPERTIES COMPILE_FLAGS -Wno-implicit-int-float-conversion
+)
+set_source_files_properties(
+    base/time/time.cc
+    PROPERTIES COMPILE_FLAGS -Wno-narrowing
+)
+set_source_files_properties(
+    base/check.cc
+    base/check_op.cc
+    base/debug/alias.cc
+    base/logging.cc
+    base/notreached.cc
+    PROPERTIES COMPILE_FLAGS -Wno-unknown-pragmas
+)
+set_source_files_properties(
+    base/task/sequence_manager/task_queue_impl.h
+    PROPERTIES COMPILE_FLAGS -Wno-final-dtor-non-final-class
+)
+set_source_files_properties(
+    base/task/thread_pool/job_task_source.cc
+    PROPERTIES COMPILE_FLAGS -Wno-c++11-narrowing
+)

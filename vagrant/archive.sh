@@ -16,6 +16,7 @@ cp -p "$CHROMIUM_DIR/src/LICENSE.chromium_os" "$TMP_DIR"
 # --------------------------------------------------
 
 readonly BASE_FILES=(
+  base/allocator/allocator_extension
   base/allocator/partition_allocator/address_space_randomization
   base/allocator/partition_allocator/page_allocator
   base/allocator/partition_allocator/page_allocator_constants
@@ -57,6 +58,7 @@ readonly BASE_FILES=(
   base/containers/flat_tree
   base/containers/intrusive_heap
   base/containers/linked_list
+  base/containers/mru_cache
   base/containers/queue
   base/containers/span
   base/containers/stack
@@ -72,6 +74,7 @@ readonly BASE_FILES=(
   base/debug/debugger
   base/debug/dump_without_crashing
   base/debug/leak_annotations
+  base/debug/profiler
   base/debug/stack_trace
   base/debug/task_trace
   base/environment
@@ -88,10 +91,12 @@ readonly BASE_FILES=(
   base/files/platform_file
   base/files/scoped_file
   base/feature_list
+  base/format_macros
   base/gtest_prod_util
   base/hash/hash
   base/hash/md5
   base/hash/md5_boringssl
+  base/hash/sha1
   base/immediate_crash
   base/json/json_common
   base/json/json_parser
@@ -110,6 +115,7 @@ readonly BASE_FILES=(
   base/memory/raw_scoped_refptr_mismatch_checker
   base/memory/read_only_shared_memory_region
   base/memory/ref_counted
+  base/memory/ref_counted_memory
   base/memory/scoped_refptr
   base/memory/shared_memory_mapping
   base/memory/shared_memory_security_policy
@@ -172,6 +178,9 @@ readonly BASE_FILES=(
   base/path_service
   base/pending_task
   base/pickle
+  base/power_monitor/power_monitor
+  base/power_monitor/power_monitor_source
+  base/power_monitor/power_observer
   base/posix/eintr_wrapper
   base/posix/file_descriptor_shuffle
   base/posix/global_descriptors
@@ -196,6 +205,7 @@ readonly BASE_FILES=(
   base/stl_util
   base/strings/char_traits
   base/strings/escape
+  base/strings/pattern
   base/strings/strcat
   base/strings/strcat_internal
   base/strings/string16
@@ -249,6 +259,7 @@ readonly BASE_FILES=(
   base/task/sequence_manager/task_time_observer
   base/task/sequence_manager/tasks
   base/task/sequence_manager/thread_controller
+  base/task/sequence_manager/thread_controller_power_monitor
   base/task/sequence_manager/thread_controller_with_message_pump_impl
   base/task/sequence_manager/thread_controller_impl
   base/task/sequence_manager/time_domain
@@ -341,16 +352,22 @@ readonly BASE_FILES=(
   base/trace_event/builtin_categories
   base/trace_event/category_registry
   base/trace_event/common/trace_event_common
+  base/trace_event/event_name_filter
   base/trace_event/heap_profiler
   base/trace_event/heap_profiler_allocation_context
   base/trace_event/heap_profiler_allocation_context_tracker
+  base/trace_event/heap_profiler_event_filter
   base/trace_event/log_message
+  base/trace_event/malloc_dump_provider
   base/trace_event/memory_allocator_dump
   base/trace_event/memory_allocator_dump_guid
   base/trace_event/memory_dump_manager
   base/trace_event/memory_dump_provider
   base/trace_event/memory_dump_provider_info
   base/trace_event/memory_dump_request_args
+  base/trace_event/memory_dump_scheduler
+  base/trace_event/memory_infra_background_allowlist
+  base/trace_event/memory_usage_estimator
   base/trace_event/process_memory_dump
   base/trace_event/thread_instruction_count
   base/trace_event/trace_arguments
@@ -358,6 +375,7 @@ readonly BASE_FILES=(
   base/trace_event/trace_config
   base/trace_event/trace_config_category_filter
   base/trace_event/trace_event
+  base/trace_event/trace_event_filter
   base/trace_event/trace_event_impl
   base/trace_event/trace_event_memory_overhead
   base/trace_event/trace_event_stub
@@ -405,7 +423,12 @@ readonly GEN_FILES=(
   third_party/perfetto/protos/perfetto/common/builtin_clock.pbzero
   third_party/perfetto/protos/perfetto/trace/interned_data/interned_data.pbzero
   third_party/perfetto/protos/perfetto/trace/trace_packet.pbzero
+  third_party/perfetto/protos/perfetto/trace/track_event/chrome_process_descriptor.gen
+  third_party/perfetto/protos/perfetto/trace/track_event/chrome_thread_descriptor.gen
+  third_party/perfetto/protos/perfetto/trace/track_event/counter_descriptor.gen
   third_party/perfetto/protos/perfetto/trace/track_event/debug_annotation.pbzero
+  third_party/perfetto/protos/perfetto/trace/track_event/process_descriptor.gen
+  third_party/perfetto/protos/perfetto/trace/track_event/thread_descriptor.gen
   third_party/perfetto/protos/perfetto/trace/track_event/track_descriptor.gen
   third_party/perfetto/protos/perfetto/trace/track_event/track_descriptor.pbzero
   third_party/perfetto/protos/perfetto/trace/track_event/track_event.pbzero
@@ -462,6 +485,8 @@ readonly PERFETTO_FILES=(
   base/logging
   base/proc_utils
   base/thread_utils
+  base/time
+  ext/base/utils
   protozero/contiguous_memory_range
   protozero/copyable_ptr
   protozero/cpp_message_obj
@@ -521,6 +546,33 @@ for file in "${BORINGSSL_FILES[@]}"; do
   if [ -e "$source" ]; then
     mkdir -p "$TMP_DIR/$BORINGSSL_SOURCE_DIR/$dir"
     cp -p "$source" "$TMP_DIR/$BORINGSSL_SOURCE_DIR/$dir"
+  fi
+done
+
+# --------------------------------------------------
+
+readonly GPREFTOOLS_HEADER_DIR=third_party/tcmalloc/chromium/src/gperftools
+readonly GPREFTOOLS_SOURCE_DIR=third_party/tcmalloc/chromium/src
+readonly GPREFTOOLS_FILES=(
+  heap-profiler
+  malloc_extension
+  malloc_hook
+  malloc_hook_c
+)
+
+for file in "${GPREFTOOLS_FILES[@]}"; do
+  dir=$(dirname "$file")
+
+  header="$CHROMIUM_DIR/src/$GPREFTOOLS_HEADER_DIR/$file.h"
+  if [ -e "$header" ]; then
+    mkdir -p "$TMP_DIR/$GPREFTOOLS_HEADER_DIR/$dir"
+    cp -p "$header" "$TMP_DIR/$GPREFTOOLS_HEADER_DIR/$dir"
+  fi
+
+  source="$CHROMIUM_DIR/src/$GPREFTOOLS_SOURCE_DIR/$file.cc"
+  if [ -e "$source" ]; then
+    mkdir -p "$TMP_DIR/$GPREFTOOLS_SOURCE_DIR/$dir"
+    cp -p "$source" "$TMP_DIR/$GPREFTOOLS_SOURCE_DIR/$dir"
   fi
 done
 
