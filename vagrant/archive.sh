@@ -4,13 +4,14 @@
 set -e
 set -u
 
-HOST=quic-pg-vagrant
+CHROMIUM_DIR=$HOME/chromium
+TMP_DIR=$HOME/tmp/chromium
+mkdir -p "$TMP_DIR"
 
-CHROMIUM_REMOTE_DIR=/home/vagrant/chromium/src
-CHROMIUM_LOCAL_DIR=lib/chromium
+# --------------------------------------------------
 
-scp "$HOST:$CHROMIUM_REMOTE_DIR/LICENSE" lib/chromium
-scp "$HOST:$CHROMIUM_REMOTE_DIR/LICENSE.chromium_os" lib/chromium
+cp -p "$CHROMIUM_DIR/src/LICENSE" "$TMP_DIR"
+cp -p "$CHROMIUM_DIR/src/LICENSE.chromium_os" "$TMP_DIR"
 
 # --------------------------------------------------
 
@@ -144,16 +145,16 @@ readonly BASE_FILES=(
 
 for file in "${BASE_FILES[@]}"; do
   dir=$(dirname "$file")
-  mkdir -p "$CHROMIUM_LOCAL_DIR/$dir"
+  mkdir -p "$TMP_DIR/$dir"
 
-  header="$CHROMIUM_REMOTE_DIR/$file.h"
-  if ssh $HOST test -e "$header"; then
-    scp "$HOST:$header" "$CHROMIUM_LOCAL_DIR/$dir"
+  header="$CHROMIUM_DIR/src/$file.h"
+  if [ -e "$header" ]; then
+    cp -p "$header" "$TMP_DIR/$dir"
   fi
 
-  source="$CHROMIUM_REMOTE_DIR/$file.cc"
-  if ssh $HOST test -e "$source"; then
-    scp "$HOST:$source" "$CHROMIUM_LOCAL_DIR/$dir"
+  source="$CHROMIUM_DIR/src/$file.cc"
+  if [ -e "$source" ]; then
+    cp -p "$source" "$TMP_DIR/$dir"
   fi
 done
 
@@ -175,16 +176,16 @@ readonly GEN_FILES=(
 
 for file in "${GEN_FILES[@]}"; do
   dir=$(dirname "$file")
-  mkdir -p "$CHROMIUM_LOCAL_DIR/$dir"
+  mkdir -p "$TMP_DIR/$dir"
 
-  header="$CHROMIUM_REMOTE_DIR/$GEN_FILE_DIR/$file.h"
-  if ssh $HOST test -e "$header"; then
-    scp "$HOST:$header" "$CHROMIUM_LOCAL_DIR/$dir"
+  header="$CHROMIUM_DIR/src/$GEN_FILE_DIR/$file.h"
+  if [ -e "$header" ]; then
+    cp -p "$header" "$TMP_DIR/$dir"
   fi
 
-  source="$CHROMIUM_REMOTE_DIR/$GEN_FILE_DIR/$file.cc"
-  if ssh $HOST test -e "$source"; then
-    scp "$HOST:$source" "$CHROMIUM_LOCAL_DIR/$dir"
+  source="$CHROMIUM_DIR/src/$GEN_FILE_DIR/$file.cc"
+  if [ -e "$source" ]; then
+    cp -p "$source" "$TMP_DIR/$dir"
   fi
 done
 
@@ -196,20 +197,19 @@ readonly GTEST_FILES=(
   gtest_prod
 )
 
-mkdir -p "$CHROMIUM_LOCAL_DIR/$GTEST_HEADER_DIR"
-mkdir -p "$CHROMIUM_LOCAL_DIR/$GTEST_SOURCE_DIR"
-
 for file in "${GTEST_FILES[@]}"; do
   dir=$(dirname "$file")
 
-  header="$CHROMIUM_REMOTE_DIR/$GTEST_HEADER_DIR/$file.h"
-  if ssh $HOST test -e "$header"; then
-    scp "$HOST:$header" "$CHROMIUM_LOCAL_DIR/$GTEST_HEADER_DIR/$dir"
+  header="$CHROMIUM_DIR/src/$GTEST_HEADER_DIR/$file.h"
+  if [ -e "$header" ]; then
+    mkdir -p "$TMP_DIR/$GTEST_HEADER_DIR"
+    cp -p "$header" "$TMP_DIR/$GTEST_HEADER_DIR/$dir"
   fi
 
-  source="$CHROMIUM_REMOTE_DIR/$GTEST_SOURCE_DIR/$file.cc"
-  if ssh $HOST test -e "$source"; then
-    scp "$HOST:$source" "$CHROMIUM_LOCAL_DIR/$GTEST_SOURCE_DIR/$dir"
+  source="$CHROMIUM_DIR/src/$GTEST_SOURCE_DIR/$file.cc"
+  if [ -e "$source" ]; then
+    mkdir -p "$TMP_DIR/$GTEST_SOURCE_DIR"
+    cp -p "$source" "$TMP_DIR/$GTEST_SOURCE_DIR/$dir"
   fi
 done
 
@@ -247,30 +247,20 @@ readonly PERFETTO_FILES=(
 for file in "${PERFETTO_FILES[@]}"; do
   dir=$(dirname "$file")
 
-  mkdir -p "$CHROMIUM_LOCAL_DIR/$PERFETTO_HEADER_DIR/$dir"
-  header="$CHROMIUM_REMOTE_DIR/$PERFETTO_HEADER_DIR/$file.h"
-  if ssh $HOST test -e "$header"; then
-    scp "$HOST:$header" "$CHROMIUM_LOCAL_DIR/$PERFETTO_HEADER_DIR/$dir"
+  header="$CHROMIUM_DIR/src/$PERFETTO_HEADER_DIR/$file.h"
+  if [ -e "$header" ]; then
+    mkdir -p "$TMP_DIR/$PERFETTO_HEADER_DIR/$dir"
+    cp -p "$header" "$TMP_DIR/$PERFETTO_HEADER_DIR/$dir"
   fi
 
-  mkdir -p "$CHROMIUM_LOCAL_DIR/$PERFETTO_SOURCE_DIR/$dir"
-  source="$CHROMIUM_REMOTE_DIR/$PERFETTO_SOURCE_DIR/$file.cc"
-  if ssh $HOST test -e "$source"; then
-    scp "$HOST:$source" "$CHROMIUM_LOCAL_DIR/$PERFETTO_SOURCE_DIR/$dir"
+  source="$CHROMIUM_DIR/src/$PERFETTO_SOURCE_DIR/$file.cc"
+  if [ -e "$source" ]; then
+    mkdir -p "$TMP_DIR/$PERFETTO_SOURCE_DIR/$dir"
+    cp -p "$source" "$TMP_DIR/$PERFETTO_SOURCE_DIR/$dir"
   fi
 done
 
-scp $HOST:$CHROMIUM_REMOTE_DIR/out/Debug/gen/third_party/perfetto/build_config/perfetto_build_flags.h \
-    $CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto/base
+cp -p "$CHROMIUM_DIR/src/out/Debug/gen/third_party/perfetto/build_config/perfetto_build_flags.h" \
+      "$TMP_DIR/third_party/perfetto/include/perfetto/base"
 
-# --------------------------------------------------
-
-PERFETTO_SYMLINK=$CHROMIUM_LOCAL_DIR/perfetto
-if [ ! -e "$PERFETTO_SYMLINK" ]; then
-  ln -s "$(pwd)/$CHROMIUM_LOCAL_DIR/third_party/perfetto/include/perfetto" $PERFETTO_SYMLINK
-fi
-
-PERFETTO_PROTO_SYMLINK=$CHROMIUM_LOCAL_DIR/protos
-if [ ! -e "$PERFETTO_PROTO_SYMLINK" ]; then
-  ln -s "$(pwd)/$CHROMIUM_LOCAL_DIR/third_party/perfetto/protos" $PERFETTO_PROTO_SYMLINK
-fi
+tar -czvf tmp/chromium.tar.gz tmp/chromium
