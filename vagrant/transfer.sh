@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2016
 
 set -e
 set -u
@@ -25,3 +26,12 @@ PERFETTO_PROTO_SYMLINK=$CHROMIUM_DIR/protos
 if [ ! -e "$PERFETTO_PROTO_SYMLINK" ]; then
   ln -s "$CHROMIUM_DIR/third_party/perfetto/protos" "$PERFETTO_PROTO_SYMLINK"
 fi
+
+{
+  echo 'add_library(chromium STATIC'
+  find ./lib/chromium -type f -name '*.cc' | sort
+  echo ')'
+  echo 'target_include_directories(chromium PUBLIC "${PROJECT_SOURCE_DIR}/lib/chromium")'
+} >> "$CHROMIUM_DIR/CMakeLists.txt"
+
+sed -i 's/\.\/lib\/chromium\//    /g' "$CHROMIUM_DIR/CMakeLists.txt"
