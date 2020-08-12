@@ -279,7 +279,12 @@ add_library(chromium STATIC
     third_party/perfetto/src/tracing/track_event_category_registry.cc
     third_party/tcmalloc/chromium/src/abort.cc
     third_party/tcmalloc/chromium/src/elf_mem_image.cc
+    third_party/tcmalloc/chromium/src/heap-checker.cc
+    third_party/tcmalloc/chromium/src/heap-profiler.cc
     third_party/tcmalloc/chromium/src/logging.cc
+    third_party/tcmalloc/chromium/src/malloc_extension.cc
+    third_party/tcmalloc/chromium/src/malloc_hook.cc
+    third_party/tcmalloc/chromium/src/spinlock.cc
     third_party/tcmalloc/chromium/src/stacktrace.cc
     third_party/tcmalloc/chromium/src/sysinfo.cc
     third_party/tcmalloc/chromium/src/vdso_support.cc

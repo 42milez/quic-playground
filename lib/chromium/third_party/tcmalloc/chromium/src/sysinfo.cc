@@ -58,7 +58,7 @@
 #endif
 #include "base/sysinfo.h"
 #include "third_party/tcmalloc/chromium/src/base/commandlineflags.h"
-#include "base/dynamic_annotations.h"   // for RunningOnValgrind
+#include "third_party/tcmalloc/chromium/src/base/dynamic_annotations.h"   // for RunningOnValgrind
 #include "third_party/tcmalloc/chromium/src/base/logging.h"
 
 #ifdef PLATFORM_WINDOWS

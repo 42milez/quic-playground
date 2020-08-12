@@ -43,7 +43,7 @@
 #include <stddef.h>   // for ptrdiff_t
 
 #include "third_party/tcmalloc/chromium/src/base/logging.h"
-#include "base/dynamic_annotations.h"
+#include "third_party/tcmalloc/chromium/src/base/dynamic_annotations.h"
 #include "third_party/tcmalloc/chromium/src/base/basictypes.h"  // for COMPILE_ASSERT
 
 #ifndef AT_SYSINFO_EHDR
