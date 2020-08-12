@@ -629,7 +629,6 @@ readonly TCMALLOC_BASE_FILES=(
   atomicops
   atomicops-internals-x86
   basictypes
-  commandlineflags
   dynamic_annotations
   elf_mem_image
   elfcore
@@ -661,6 +660,12 @@ for file in "${TCMALLOC_BASE_FILES[@]}"; do
     cp -p "$source" "$TMP_DIR/$TCMALLOC_SOURCE_DIR"
   fi
 done
+
+cp -p "$CHROMIUM_DIR/src/third_party/tcmalloc/chromium/src/base/commandlineflags.h" \
+      "$TMP_DIR/$TCMALLOC_BASE_HEADER_DIR/commandlineflags_chromium.h"
+
+cp -p "$CHROMIUM_DIR/src/third_party/tcmalloc/vendor/src/base/commandlineflags.h" \
+      "$TMP_DIR/$TCMALLOC_BASE_HEADER_DIR"
 
 # --------------------------------------------------
 
@@ -703,6 +708,8 @@ readonly TCMALLOC_REPLACE_PATTERNS=(
 for pattern in "${TCMALLOC_REPLACE_PATTERNS[@]}"; do
   find "$TMP_DIR/$TCMALLOC_SOURCE_DIR" -type f -print0 | xargs -0 sed -i -e "$pattern"
 done
+
+sed -i -e "s/commandlineflags\.h/commandlineflags_chromium\.h/" "$TMP_DIR/$TCMALLOC_SOURCE_DIR/symbolize.cc"
 
 # --------------------------------------------------
 

@@ -57,7 +57,7 @@
 #include <io.h>            // for get_osfhandle()
 #endif
 #include <string>
-#include "third_party/tcmalloc/chromium/src/base/commandlineflags.h"
+#include "third_party/tcmalloc/chromium/src/base/commandlineflags_chromium.h"
 #include "third_party/tcmalloc/chromium/src/base/logging.h"
 #include "third_party/tcmalloc/chromium/src/base/sysinfo.h"
 #if defined(__FreeBSD__)
