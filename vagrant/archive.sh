@@ -699,10 +699,10 @@ done
 # --------------------------------------------------
 
 readonly TCMALLOC_REPLACE_PATTERNS=(
-  's/<config\.h>/"third_party\/tcmalloc\/chromium\/src\/config\.h"/g'
-  's/<gperftools\/\(.*\)>/"gperftools\/\1"/g'
   's/"base/"third_party\/tcmalloc\/chromium\/src\/base/g'
   's/"malloc_hook-inl\.h"/"third_party\/tcmalloc\/chromium\/src\/malloc_hook-inl\.h"/g'
+  's/<config\.h>/"third_party\/tcmalloc\/chromium\/src\/config\.h"/g'
+  's/<gperftools\/\(.*\)>/"gperftools\/\1"/g'
 )
 
 for pattern in "${TCMALLOC_REPLACE_PATTERNS[@]}"; do
