@@ -3,13 +3,8 @@
 set -e
 set -u
 
-if [ -e "$HOME/BUILD_INFO" ]; then
-  exit 0
-fi
-
-#  Checking out and building Chromium on Linux
-#  https://chromium.googlesource.com/chromium/src/+/master/docs/linux/build_instructions.md
-# --------------------------------------------------
+# Checking out and building Chromium on Linux
+# https://chromium.googlesource.com/chromium/src/+/master/docs/linux/build_instructions.md
 
 WORK_DIR=/home/vagrant
 
@@ -26,13 +21,8 @@ cd $WORK_DIR/chromium/src || exit
 
 gclient runhooks
 
-#  Playing with QUIC
-#  https://www.chromium.org/quic/playing-with-quic
-# --------------------------------------------------
+# Playing with QUIC
+# https://www.chromium.org/quic/playing-with-quic
 
 gn gen $WORK_DIR/chromium/src/out/Debug
 ninja -C $WORK_DIR/chromium/src/out/Debug quic_server quic_client
-
-# --------------------------------------------------
-
-date > "$HOME/BUILD_INFO"

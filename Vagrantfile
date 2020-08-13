@@ -13,7 +13,6 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
   end
-  config.vm.provision :as_root, type: "shell", path: "./vagrant/provision/provisioners/root.sh"
-  config.vm.provision :as_vagrant, type: "shell", path: "./vagrant/provision/provisioners/vagrant.sh", privileged: false
-  config.vm.provision "file", source: "./vagrant/provision/archive.sh", destination: "archive.sh"
+  config.vm.provision :as_root, type: "shell", path: "./vagrant/provisioners/root.sh"
+  config.vm.provision :as_vagrant, type: "shell", path: "./vagrant/provisioners/vagrant.sh", privileged: false
 end
