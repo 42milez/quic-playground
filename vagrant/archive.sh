@@ -78,6 +78,7 @@ readonly BASE_FILES=(
   base/debug/stack_trace
   base/debug/task_trace
   base/environment
+  base/feature_list
   base/file_descriptor_posix
   base/files/file
   base/files/file_descriptor_watcher_posix
@@ -90,7 +91,6 @@ readonly BASE_FILES=(
   base/files/memory_mapped_file
   base/files/platform_file
   base/files/scoped_file
-  base/feature_list
   base/format_macros
   base/gtest_prod_util
   base/hash/hash
@@ -178,14 +178,14 @@ readonly BASE_FILES=(
   base/path_service
   base/pending_task
   base/pickle
-  base/power_monitor/power_monitor
-  base/power_monitor/power_monitor_source
-  base/power_monitor/power_observer
   base/posix/eintr_wrapper
   base/posix/file_descriptor_shuffle
   base/posix/global_descriptors
   base/posix/safe_strerror
   base/post_task_and_reply_with_result_internal
+  base/power_monitor/power_monitor
+  base/power_monitor/power_monitor_source
+  base/power_monitor/power_observer
   base/process/launch
   base/process/memory
   base/process/process
@@ -246,8 +246,8 @@ readonly BASE_FILES=(
   base/task/sequence_manager/atomic_flag_set
   base/task/sequence_manager/enqueue_order
   base/task/sequence_manager/enqueue_order_generator
-  base/task/sequence_manager/lazy_now
   base/task/sequence_manager/lazily_deallocated_deque
+  base/task/sequence_manager/lazy_now
   base/task/sequence_manager/real_time_domain
   base/task/sequence_manager/sequence_manager
   base/task/sequence_manager/sequence_manager_impl
@@ -259,9 +259,9 @@ readonly BASE_FILES=(
   base/task/sequence_manager/task_time_observer
   base/task/sequence_manager/tasks
   base/task/sequence_manager/thread_controller
+  base/task/sequence_manager/thread_controller_impl
   base/task/sequence_manager/thread_controller_power_monitor
   base/task/sequence_manager/thread_controller_with_message_pump_impl
-  base/task/sequence_manager/thread_controller_impl
   base/task/sequence_manager/time_domain
   base/task/sequence_manager/work_deduplicator
   base/task/sequence_manager/work_queue
@@ -282,9 +282,9 @@ readonly BASE_FILES=(
   base/task/thread_pool/pooled_single_thread_task_runner_manager
   base/task/thread_pool/pooled_task_runner_delegate
   base/task/thread_pool/priority_queue
-  base/task/thread_pool/service_thread
   base/task/thread_pool/sequence
   base/task/thread_pool/sequence_sort_key
+  base/task/thread_pool/service_thread
   base/task/thread_pool/task
   base/task/thread_pool/task_source
   base/task/thread_pool/task_tracker
@@ -300,7 +300,6 @@ readonly BASE_FILES=(
   base/task_runner
   base/task_runner_util
   base/template_util
-  base/timer/elapsed_timer
   base/third_party/cityhash/city
   base/third_party/double_conversion/double-conversion/bignum
   base/third_party/double_conversion/double-conversion/bignum-dtoa
@@ -345,6 +344,7 @@ readonly BASE_FILES=(
   base/time/tick_clock
   base/time/time
   base/time/time_override
+  base/timer/elapsed_timer
   base/timer/timer
   base/token
   base/trace_event/base_tracing
