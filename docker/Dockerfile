@@ -30,15 +30,16 @@ RUN \
     gdb \
     gdbserver \
     git \
-    rsync
+    openssh-server \
+    python3-pip \
+    rsync \
+  && rm -rf /var/lib/apt/lists/*
 
 #  Enable SSH service
 # --------------------------------------------------
 # https://docs.docker.com/engine/examples/running_ssh_service
 RUN \
-  apt-get install -y \
-    openssh-server \
-  && mkdir -p /var/run/sshd \
+  mkdir -p /var/run/sshd \
   && echo "root:root" | chpasswd \
   && sed -i "s/#PermitRootLogin prohibit-password/PermitRootLogin yes/" /etc/ssh/sshd_config \
   && sed "s@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g" -i /etc/pam.d/sshd
@@ -46,9 +47,7 @@ RUN \
 #  Install CMake
 # --------------------------------------------------
 RUN \
-  apt-get install -y \
-    python3-pip \
-  && python3 -m pip install --no-cache-dir --upgrade pip \
+  python3 -m pip install --no-cache-dir --upgrade pip \
   && python3 -m pip install --no-cache-dir cmake==$CMAKE_VERSION
 
 #  Install libraries
@@ -72,7 +71,8 @@ RUN \
   && mkdir build \
   && cd build \
   && cmake .. \
-  && make -j
+  && make -j \
+  && make install
 
 #  Install github-release
 # --------------------------------------------------
@@ -83,10 +83,6 @@ RUN \
   && bzip2 -d linux-amd64-github-release.bz2 \
   && mv linux-amd64-github-release $BINARY_PATH/github-release \
   && chmod 0700 $BINARY_PATH/github-release
-
-#  Clean up the apt cache
-# --------------------------------------------------
-RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR $PROJECT_ROOT
 

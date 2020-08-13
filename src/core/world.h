@@ -1,5 +1,5 @@
-#ifndef RUDP_WORLD_H_
-#define RUDP_WORLD_H_
+#ifndef CORE_WORLD_H_
+#define CORE_WORLD_H_
 
 #include <string>
 
@@ -16,4 +16,4 @@ namespace core
     };
 } // namespace core
 
-#endif // RUDP_WORLD_H_
+#endif // CORE_WORLD_H_

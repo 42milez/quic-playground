@@ -70,6 +70,7 @@ install:
   - cd build
   - $HOME/.local/bin/cmake ..
   - make -j
+  - make install
 script:
   # Setup
   - cd $TRAVIS_BUILD_DIR
